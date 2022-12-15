@@ -1,0 +1,13 @@
+DB_URL=""
+DB_NAME=""
+JWT_SECRET="geheim"
+FRONTEND_URL="http://localhost:3000"
+COOKIE_SESSION_SECRET="geheim"
+
+
+src => uploads ordner=>im uploads ordner profile und receipt orner
+
+▿uploads
+   >profile
+   >receipt
+    
