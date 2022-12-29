@@ -32,7 +32,7 @@ const Login = ({ setToken }) => {
           return setErrorMessage(result.message);
         }
 
-        console.log(result.accessToken);
+        // console.log(result.accessToken);
         setToken(result.accessToken);
         navigate("/home");
       });

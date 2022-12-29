@@ -24,8 +24,8 @@ const Home = ({ walletInfo }) => {
           .map((f) => f.amount)
           .reduce((sum, amount) => sum + amount, 0)
       : 0;
-  console.log(income);
-  console.log(expenses);
+  // console.log(income);
+  // console.log(expenses);
   const totalBalance = income - expenses;
 
   return (

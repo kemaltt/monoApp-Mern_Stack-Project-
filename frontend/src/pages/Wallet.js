@@ -17,7 +17,7 @@ const Wallet = ({ walletInfo }) => {
           .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
-  console.log(income);
+  // console.log(income);
   const expenses =
     walletInfo && Array.isArray(walletInfo.transactions)
       ? walletInfo.transactions

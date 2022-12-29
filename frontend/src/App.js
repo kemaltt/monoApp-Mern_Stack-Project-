@@ -47,8 +47,8 @@ function App() {
       .then((walletResult) => setWalletInfo(walletResult));
   }, [token, replyCounter]);
 
-  console.log(walletInfo);
-  console.log(replyCounter);
+  // console.log(walletInfo);
+  // console.log(replyCounter);
 
   return (
     <div className="App">

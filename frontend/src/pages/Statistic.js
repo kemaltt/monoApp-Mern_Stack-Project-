@@ -8,98 +8,98 @@ import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
 
 const Statistic = ({ walletInfo }) => {
-  const sum = (accumulator, curr) => accumulator + curr;
-  const hours24 = 86400000;
+  // const sum = (accumulator, curr) => accumulator + curr;
+  // const hours24 = 86400000;
 
-  const [
-    { income: incomeReducedDay1, expenses: expensesReducedDay1 },
-    { income: incomeReducedDay2, expenses: expensesReducedDay2 },
-    { income: incomeReducedDay3, expenses: expensesReducedDay3 },
-    { income: incomeReducedDay4, expenses: expensesReducedDay4 },
-    { income: incomeReducedDay5, expenses: expensesReducedDay5 },
-    { income: incomeReducedDay6, expenses: expensesReducedDay6 },
-    { income: incomeReducedDay7, expenses: expensesReducedDay7 },
-  ] = Array.from(Array(7)).map((_, dayIdx) => {
-    const arrDay =
-      walletInfo &&
-      walletInfo.transactions.filter(
-        (t) =>
-          t.createdAt > Date.now() - hours24 * (dayIdx + 1) &&
-          t.createdAt < Date.now() - hours24 * dayIdx
-      );
+  // const [
+  //   { income: incomeReducedDay1, expenses: expensesReducedDay1 },
+  //   { income: incomeReducedDay2, expenses: expensesReducedDay2 },
+  //   { income: incomeReducedDay3, expenses: expensesReducedDay3 },
+  //   { income: incomeReducedDay4, expenses: expensesReducedDay4 },
+  //   { income: incomeReducedDay5, expenses: expensesReducedDay5 },
+  //   { income: incomeReducedDay6, expenses: expensesReducedDay6 },
+  //   { income: incomeReducedDay7, expenses: expensesReducedDay7 },
+  // ] = Array.from(Array(7)).map((_, dayIdx) => {
+  //   const arrDay =
+  //     walletInfo &&
+  //     walletInfo.transactions.filter(
+  //       (t) =>
+  //         t.createdAt > Date.now() - hours24 * (dayIdx + 1) &&
+  //         t.createdAt < Date.now() - hours24 * dayIdx
+  //     );
 
-    const income = arrDay
-      .filter((t) => t.income === true)
-      .map((t) => t.amount)
-      .reduce(sum, 0);
+  //   const income = arrDay
+  //     .filter((t) => t.income === true)
+  //     .map((t) => t.amount)
+  //     .reduce(sum, 0);
 
-    const expenses = arrDay
-      .filter((t) => t.income === false)
-      .map((t) => t.amount)
-      .reduce(sum, 0);
+  //   const expenses = arrDay
+  //     .filter((t) => t.income === false)
+  //     .map((t) => t.amount)
+  //     .reduce(sum, 0);
 
-    return { income, expenses };
-  });
+  //   return { income, expenses };
+  // });
 
-  const dataWeek = {
-    labels: [
-      new Date(Date.now()).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000 * 2).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000 * 3).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000 * 4).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000 * 5).toDateString().slice(0, 10),
-      new Date(Date.now() - 86400000 * 6).toDateString().slice(0, 10),
-    ],
-    datasets: [
-      {
-        label: "Income 7 Days",
-        data: [
-          incomeReducedDay1,
-          incomeReducedDay2,
-          incomeReducedDay3,
-          incomeReducedDay4,
-          incomeReducedDay5,
-          incomeReducedDay6,
-          incomeReducedDay7,
-        ],
-        backgroundColor: ["#00B495"],
-        borderRadius: "3",
-      },
-      {
-        label: "Expense 7 Days",
-        data: [
-          expensesReducedDay1,
-          expensesReducedDay2,
-          expensesReducedDay3,
-          expensesReducedDay4,
-          expensesReducedDay5,
-          expensesReducedDay6,
-          expensesReducedDay7,
-        ],
-        backgroundColor: ["#E4797F"],
-        borderRadius: "3",
-      },
-      {
-        label: "Total 7 Days",
-        data: [
-          incomeReducedDay1 - expensesReducedDay1,
-          incomeReducedDay2 - expensesReducedDay2,
-          incomeReducedDay3 - expensesReducedDay3,
-          incomeReducedDay4 - expensesReducedDay4,
-          incomeReducedDay5 - expensesReducedDay5,
-          incomeReducedDay6 - expensesReducedDay6,
-          incomeReducedDay7 - expensesReducedDay7,
-        ],
-        backgroundColor: ["#2B47FC"],
-        borderRadius: "3",
-      },
-    ],
-    chartArea: {
-      backgroundColor: "rgba(251, 85, 85, 0.4)",
-    },
-    maintainAspectRatio: false,
-  };
+  // const dataWeek = {
+  //   labels: [
+  //     new Date(Date.now()).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000 * 2).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000 * 3).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000 * 4).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000 * 5).toDateString().slice(0, 10),
+  //     new Date(Date.now() - 86400000 * 6).toDateString().slice(0, 10),
+  //   ],
+  //   datasets: [
+  //     {
+  //       label: "Income 7 Days",
+  //       data: [
+  //         incomeReducedDay1,
+  //         incomeReducedDay2,
+  //         incomeReducedDay3,
+  //         incomeReducedDay4,
+  //         incomeReducedDay5,
+  //         incomeReducedDay6,
+  //         incomeReducedDay7,
+  //       ],
+  //       backgroundColor: ["#00B495"],
+  //       borderRadius: "3",
+  //     },
+  //     {
+  //       label: "Expense 7 Days",
+  //       data: [
+  //         expensesReducedDay1,
+  //         expensesReducedDay2,
+  //         expensesReducedDay3,
+  //         expensesReducedDay4,
+  //         expensesReducedDay5,
+  //         expensesReducedDay6,
+  //         expensesReducedDay7,
+  //       ],
+  //       backgroundColor: ["#E4797F"],
+  //       borderRadius: "3",
+  //     },
+  //     {
+  //       label: "Total 7 Days",
+  //       data: [
+  //         incomeReducedDay1 - expensesReducedDay1,
+  //         incomeReducedDay2 - expensesReducedDay2,
+  //         incomeReducedDay3 - expensesReducedDay3,
+  //         incomeReducedDay4 - expensesReducedDay4,
+  //         incomeReducedDay5 - expensesReducedDay5,
+  //         incomeReducedDay6 - expensesReducedDay6,
+  //         incomeReducedDay7 - expensesReducedDay7,
+  //       ],
+  //       backgroundColor: ["#2B47FC"],
+  //       borderRadius: "3",
+  //     },
+  //   ],
+  //   chartArea: {
+  //     backgroundColor: "rgba(251, 85, 85, 0.4)",
+  //   },
+  //   maintainAspectRatio: false,
+  // };
 
   // ________________________________________________________
 
@@ -172,9 +172,9 @@ const Statistic = ({ walletInfo }) => {
 
             <h4>Statistics</h4>
           </div>
-          <div className="chart_data">
+          {/* <div className="chart_data">
             <BarChart chartData={dataWeek} />
-          </div>
+          </div> */}
 
           <div className="transaction_header">
             <h6>Top Spending</h6>
