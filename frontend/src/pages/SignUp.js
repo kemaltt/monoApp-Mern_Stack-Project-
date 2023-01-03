@@ -15,7 +15,6 @@ const SignUp = () => {
 
   function handleSignUp(e) {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
@@ -23,6 +22,7 @@ const SignUp = () => {
     if (userImg) {
       formData.append("userImg", userImg, userImg.name);
     }
+
     fetch(`${apiBaseUrl}/users/register`, {
       method: "POST",
 
@@ -60,7 +60,7 @@ const SignUp = () => {
         <div className="formContent">
           <label htmlFor="name">NAME</label>
           <input
-            type="email"
+            type="text"
             name="name"
             id="name"
             placeholder="Full Name"
