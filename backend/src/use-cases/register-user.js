@@ -10,10 +10,7 @@ async function registerUser({ name, email, password, userImg }) {
   const foundUser = await UserDAO.findByEmail(email);
   const passwordSalt = createRandomHash();
   const passwordHash = hash(password + "" + passwordSalt);
-  if (foundUser) {
-    throw new Error("Your email address is registered,please login");
-    // return "your email address is registered,please login";
-  } else if (!name) {
+  if (!name) {
     throw new Error("Name must exist.");
   } else if (!name.match(nameVal)) {
     throw new Error(
@@ -27,6 +24,9 @@ async function registerUser({ name, email, password, userImg }) {
     throw new Error("Password must exist!");
   } else if (!password.match(passwordVal)) {
     throw new Error("Please enter a valid password!");
+  } else if (foundUser) {
+    throw new Error("Your email address is registered,please login");
+    // return "your email address is registered,please login";
   } else {
     const newUser = makeUser({
       name,
