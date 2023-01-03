@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Man from "../img/man.png";
 import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -12,31 +13,23 @@ const Login = ({ setToken }) => {
 
   const navigate = useNavigate();
 
-  function handleLogIn(e) {
+  const handleLogIn = async (e) => {
     e.preventDefault();
-
-    fetch(`${apiBaseUrl}/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const response = await axios.post(`${apiBaseUrl}/users/login`, {
         email,
         password,
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.message) {
-          return setErrorMessage(result.message);
-        }
-
-        // console.log(result.accessToken);
-        setToken(result.accessToken);
-        navigate("/home");
       });
-  }
+      console.log(response);
+      setToken(response.data.accessToken);
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+      if (error) {
+        return setErrorMessage(error.response.data.message);
+      }
+    }
+  };
 
   return (
     <div className="login">
