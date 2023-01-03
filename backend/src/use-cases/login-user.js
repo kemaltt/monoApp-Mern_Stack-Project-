@@ -5,9 +5,19 @@ const { hash } = require("../utils/hash");
 const { createToken } = require("../utils/createToken");
 
 async function loginUser({ email, password }) {
+  const emailVal = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i;
+  const passwordVal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
   const foundUser = await UserDAO.findByEmail(email);
 
-  if (!foundUser) {
+  if (!email) {
+    throw new Error("E-Mail must exist.");
+  } else if (!email.match(emailVal)) {
+    throw new Error("Please enter a valid email address!");
+  } else if (!password) {
+    throw new Error("Password must exist!");
+  } else if (!password.match(passwordVal)) {
+    throw new Error("Please enter a valid password!");
+  } else if (!foundUser) {
     throw new Error("Your email or password is incorrect,please try again");
   }
 
