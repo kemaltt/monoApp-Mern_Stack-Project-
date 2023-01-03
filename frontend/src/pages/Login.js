@@ -26,7 +26,7 @@ const Login = ({ setToken }) => {
     } catch (error) {
       console.log(error);
       if (error) {
-        return setErrorMessage(error.response.data.message);
+        return setErrorMessage(error.response.data.message.slice(7));
       }
     }
   };
