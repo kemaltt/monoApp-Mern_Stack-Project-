@@ -151,13 +151,13 @@ const Statistic = ({ walletInfo }) => {
   const handleSelect = (e) => {
     e.preventDefault();
 
-    if (e.target.value === "Name") {
-      nameSortDesc();
-    } else if (e.target.value === "Date") {
-      dateSortDesc();
-    } else if (e.target.value === "Amount") {
-      amountSortDesc();
-    }
+    // if (e.target.value === "Name") {
+    //   nameSortDesc();
+    // } else if (e.target.value === "Date") {
+    //   dateSortDesc();
+    // } else if (e.target.value === "Amount") {
+    //   amountSortDesc();
+    // }
   };
 
   return (
