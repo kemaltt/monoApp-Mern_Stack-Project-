@@ -9,8 +9,10 @@ import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
+// import { useAppContext } from "../context/AppContext";
 
-const EditIncome = ({ token, updateTransaction, onReply }) => {
+const EditIncome = ({ token, onReply }) => {
+  // const { updateTrigger } = useAppContext();
   const { id } = useParams();
   console.log(id);
   const [name, setName] = useState("");
@@ -44,8 +46,9 @@ const EditIncome = ({ token, updateTransaction, onReply }) => {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        navigate("/home");
         onReply();
+        // updateTrigger();
+        navigate("/home");
       });
   };
   const editTransaction = (e) => {
@@ -74,6 +77,7 @@ const EditIncome = ({ token, updateTransaction, onReply }) => {
 
         if (editedTransaction.acknowledged) {
           onReply();
+          // updateTrigger();
           navigate("/home");
         }
       });

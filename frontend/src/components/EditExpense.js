@@ -9,8 +9,11 @@ import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
+// import { useAppContext } from "../context/AppContext";
 
 const EditExpense = ({ token, onReply }) => {
+  // const { updateTrigger } = useAppContext();
+
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -43,8 +46,9 @@ const EditExpense = ({ token, onReply }) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        navigate("/home");
         onReply();
+        // updateTrigger();
+        navigate("/home");
       });
     console.log(id);
   };
@@ -73,6 +77,7 @@ const EditExpense = ({ token, onReply }) => {
         console.log(result);
         if (result.acknowledged) {
           onReply();
+          // updateTrigger();
           navigate("/home");
         }
       });
