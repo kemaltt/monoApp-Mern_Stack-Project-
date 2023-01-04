@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { apiBaseUrl } from "../api/api";
 import { BiImageAdd } from "react-icons/bi";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const SignUp = () => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  function handleSignUp(e) {
+  async function handleSignUp(e) {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
@@ -23,24 +24,31 @@ const SignUp = () => {
       formData.append("userImg", userImg, userImg.name);
     }
 
-    fetch(`${apiBaseUrl}/users/register`, {
-      method: "POST",
+    try {
+      const response = await axios({
+        method: "post",
+        url: `${apiBaseUrl}/users/register`,
+        data: formData,
+        headers: {
+          "Content-Type": `multipart/form-data; `,
+        },
+      });
 
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if (result.err) {
-          return setErrorMessage(result.err);
-        }
-        setSuccess("account created successfuly, please login");
-        setErrorMessage("");
+      console.log(response);
+      setSuccess("account created successfuly");
+      setErrorMessage("");
+      setTimeout(() => {
         setName("");
         setEmail("");
         setPassword("");
         navigate("/login");
-      });
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+      if (error.response.data.err) {
+        return setErrorMessage(error.response.data.err);
+      }
+    }
   }
 
   return (
@@ -106,7 +114,7 @@ const SignUp = () => {
           <button onClick={handleSignUp}>Sign Up</button>
         </div>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        {success && <p>{success}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
       </motion.form>
       <p>
         Already Have An Account? <Link to="/login">Log In</Link>{" "}
