@@ -1,4 +1,4 @@
-import BarChart from "../components/BarChart";
+// import BarChart from "../components/BarChart";
 import { useState } from "react";
 import Nav from "../components/Nav";
 import Vector from "../img/Vector.png";
@@ -103,50 +103,50 @@ const Statistic = ({ walletInfo }) => {
 
   // ________________________________________________________
 
-  const [sortStatistic, setSortStatistic] = useState(walletInfo);
-  const [toggleTrans, setToggleTrans] = useState(true);
+  // const [sortStatistic, setSortStatistic] = useState(walletInfo);
+  // const [toggleTrans, setToggleTrans] = useState(true);
 
-  const navigate = useNavigate();
-  const asIncome = (amount, income) => (income ? amount : -amount);
+  // const navigate = useNavigate();
+  // const asIncome = (amount, income) => (income ? amount : -amount);
 
-  const amountSortDesc = () => {
-    setSortStatistic([
-      ...walletInfo.transactions.sort(
-        (a, b) => asIncome(b.amount, b.income) - asIncome(a.amount, a.income)
-      ),
-    ]);
-  };
+  // const amountSortDesc = () => {
+  //   setSortStatistic([
+  //     ...walletInfo.transactions.sort(
+  //       (a, b) => asIncome(b.amount, b.income) - asIncome(a.amount, a.income)
+  //     ),
+  //   ]);
+  // };
 
-  const amountSortAsc = () => {
-    setSortStatistic([
-      ...walletInfo.transactions.sort(
-        (a, b) => asIncome(a.amount, a.income) - asIncome(b.amount, b.income)
-      ),
-    ]);
-  };
+  // const amountSortAsc = () => {
+  //   setSortStatistic([
+  //     ...walletInfo.transactions.sort(
+  //       (a, b) => asIncome(a.amount, a.income) - asIncome(b.amount, b.income)
+  //     ),
+  //   ]);
+  // };
 
-  const handleToggleAmount = () => {
-    setToggleTrans(!toggleTrans);
-    toggleTrans ? amountSortDesc() : amountSortAsc();
-  };
+  // const handleToggleAmount = () => {
+  //   setToggleTrans(!toggleTrans);
+  //   toggleTrans ? amountSortDesc() : amountSortAsc();
+  // };
 
-  const nameSortDesc = () => {
-    setSortStatistic([
-      ...walletInfo.transactions.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        } else if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      }),
-    ]);
-  };
-  const dateSortDesc = () => {
-    setSortStatistic([
-      ...walletInfo.transactions.sort((a, b) => b.createdAt - a.createdAt),
-    ]);
-  };
+  // const nameSortDesc = () => {
+  //   setSortStatistic([
+  //     ...walletInfo.transactions.sort((a, b) => {
+  //       if (a.name < b.name) {
+  //         return -1;
+  //       } else if (a.name > b.name) {
+  //         return 1;
+  //       }
+  //       return 0;
+  //     }),
+  //   ]);
+  // };
+  // const dateSortDesc = () => {
+  //   setSortStatistic([
+  //     ...walletInfo.transactions.sort((a, b) => b.createdAt - a.createdAt),
+  //   ]);
+  // };
 
   const handleSelect = (e) => {
     e.preventDefault();
