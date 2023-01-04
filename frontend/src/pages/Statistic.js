@@ -106,7 +106,7 @@ const Statistic = ({ walletInfo }) => {
   // const [sortStatistic, setSortStatistic] = useState(walletInfo);
   // const [toggleTrans, setToggleTrans] = useState(true);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const asIncome = (amount, income) => (income ? amount : -amount);
 
   // const amountSortDesc = () => {
@@ -197,7 +197,11 @@ const Statistic = ({ walletInfo }) => {
                   <option value="Date">Date</option>
                 </select>
               </form>
-              <img onClick={handleToggleAmount} src={Vector} alt={Vector} />
+              <img
+                // onClick={handleToggleAmount}
+                src={Vector}
+                alt={Vector}
+              />
             </div>
           </div>
           <div className="transactionsHistory">
