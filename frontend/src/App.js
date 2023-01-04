@@ -15,7 +15,7 @@ import EditExpense from "./components/EditExpense";
 import EditIncome from "./components/EditIncome";
 import AuthRequired from "./components/AuthRequired";
 import { apiBaseUrl } from "./api/api";
-import { AppProvider, useAppContext } from "./context/AppContext";
+import { AppProvider } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
