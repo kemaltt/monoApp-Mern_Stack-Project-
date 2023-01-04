@@ -46,11 +46,16 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
     const userInfo = req.body;
     if (req.file) {
       userImg = req.file.originalname;
+      const user = await registerUser({ ...userInfo, userImg });
+      res.json(user);
+    } else {
+      const user = await registerUser({ ...userInfo });
+      res.json(user);
     }
-    const user = await registerUser({ ...userInfo, userImg });
-    res.json(user);
+    // const user = await registerUser({ ...userInfo, userImg });
+    // res.json(user);
   } catch (error) {
-    console.log(error);
+    console.log("register route", error);
     res.status(500).json({
       err: error.message || "Unknown error while registering new user.",
     });
