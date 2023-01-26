@@ -10,6 +10,7 @@ const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsloading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,12 +22,20 @@ const Login = ({ setToken }) => {
         password,
       });
       console.log(response);
-      setToken(response.data.accessToken);
-      navigate("/home");
+      setIsloading(true);
+      setTimeout(() => {
+        setToken(response.data.accessToken);
+        navigate("/home");
+        setIsloading(false);
+      }, 1000);
     } catch (error) {
       console.log(error);
       if (error) {
-        return setErrorMessage(error.response.data.message.slice(7));
+        setIsloading(true);
+        setTimeout(() => {
+          setErrorMessage(error.response.data.message.slice(7));
+          setIsloading(false);
+        }, 1000);
       }
     }
   };
@@ -71,7 +80,16 @@ const Login = ({ setToken }) => {
           />
         </div>
 
-        <button onClick={handleLogIn}>Login</button>
+        <button onClick={handleLogIn}>
+          Login
+          {isLoading && (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          )}
+        </button>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </motion.form>
 

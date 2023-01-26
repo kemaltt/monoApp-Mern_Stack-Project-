@@ -12,6 +12,7 @@ const SignUp = () => {
   const [userImg, setUserImg] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState("");
+  const [isLoading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSignUp(e) {
@@ -37,10 +38,12 @@ const SignUp = () => {
       console.log(response);
       setSuccess("account created successfuly");
       setErrorMessage("");
+      setIsloading(true);
       setTimeout(() => {
         setName("");
         setEmail("");
         setPassword("");
+        setIsloading(false);
         navigate("/login");
       }, 1000);
     } catch (error) {
@@ -112,7 +115,16 @@ const SignUp = () => {
             <BiImageAdd size={24} /> Add Profile Foto
           </label>
 
-          <button onClick={handleSignUp}>Sign Up</button>
+          <button onClick={handleSignUp}>
+            Sign Up
+            {isLoading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
+          </button>
         </div>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
