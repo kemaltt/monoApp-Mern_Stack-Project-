@@ -106,15 +106,17 @@ const TransactionsDetails = ({ walletInfo, token }) => {
 
               <div className="receipt_container">
                 <p>Receipt</p>
-                <img
-                  src={
-                    detailTransaction.img?.startsWith("http")
-                      ? detailTransaction.img
-                      : `${apiBaseUrl}/${detailTransaction.img}`
-                  }
-                  // alt={detailTransaction.img}
-                  alt="upload receipt"
-                />
+                {detailTransaction.img ? (
+                  <img
+                    src={
+                      detailTransaction.img?.startsWith("http")
+                        ? detailTransaction.img
+                        : `${apiBaseUrl}/${detailTransaction.img}`
+                    }
+                    // alt={detailTransaction.img}
+                    alt="upload receipt"
+                  />
+                ) : null}
               </div>
               <div className="buttonContainer">
                 <Link

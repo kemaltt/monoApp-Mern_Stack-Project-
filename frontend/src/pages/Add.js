@@ -19,29 +19,42 @@ const Add = ({ token, setWalletInfo, updateTransaction, onReply }) => {
   function handleTransaction(e) {
     e.preventDefault();
     console.log(income);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("amount", amount);
-    formData.append("createdAt", createdAt);
+    if (!name) {
+      alert("enter name!");
+    } else if (!amount) {
+      alert("enter amount!");
+    } else {
+      const formData = new FormData();
 
-    if (img) {
-      formData.append("img", img, img.name);
+      formData.append("name", name);
+      formData.append("amount", amount);
+
+      if (createdAt) {
+        formData.append("createdAt", createdAt);
+      } else {
+        formData.append("createdAt", Date());
+      }
+      if (img) {
+        formData.append("img", img, img.name);
+      }
+      income
+        ? formData.append("income", true)
+        : formData.append("income", false);
+
+      fetch(`${apiBaseUrl}/transactions/add`, {
+        method: "POST",
+        headers: { token: "JWT " + token },
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then(
+          (addedTransaction) =>
+            setWalletInfo((previous) => [...previous, addedTransaction]),
+          onReply()
+        );
+
+      navigate("/home");
     }
-    income ? formData.append("income", true) : formData.append("income", false);
-
-    fetch(`${apiBaseUrl}/transactions/add`, {
-      method: "POST",
-      headers: { token: "JWT " + token },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then(
-        (addedTransaction) =>
-          setWalletInfo((previous) => [...previous, addedTransaction]),
-        onReply()
-      );
-
-    navigate("/home");
   }
 
   return (

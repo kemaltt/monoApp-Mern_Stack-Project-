@@ -6,7 +6,7 @@ import ArrowUpIcon from "../components/Icons/ArrowUpIcon";
 import ArrowDownIcon from "../components/Icons/ArrowDownIcon";
 import Nav from "../components/Nav";
 import { motion } from "framer-motion";
-import TopMobileBar from "../components/TopMobileBar";
+// import TopMobileBar from "../components/TopMobileBar";
 
 const Home = ({ walletInfo }) => {
   const income =
@@ -32,7 +32,7 @@ const Home = ({ walletInfo }) => {
     walletInfo && (
       <>
         <motion.div className="home">
-          <TopMobileBar />
+          {/* <TopMobileBar /> */}
           <h4 className="home_headline">Home</h4>
           <motion.section
             initial={{ y: "-5vh" }}

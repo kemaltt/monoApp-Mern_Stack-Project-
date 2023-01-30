@@ -5,7 +5,7 @@ import Vector from "../img/Vector.png";
 import left from "../img/ArrowLeft.png";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import TopMobileBar from "../components/TopMobileBar";
+// import TopMobileBar from "../components/TopMobileBar";
 
 const Statistic = ({ walletInfo }) => {
   // const sum = (accumulator, curr) => accumulator + curr;
@@ -164,7 +164,7 @@ const Statistic = ({ walletInfo }) => {
     walletInfo && (
       <>
         <div className="statistic_container">
-          <TopMobileBar />
+          {/* <TopMobileBar /> */}
           <div className="header_container">
             <div className="img">
               <img onClick={() => navigate(-1)} src={left} alt="left" />
