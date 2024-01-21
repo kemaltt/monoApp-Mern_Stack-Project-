@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { getDB } = require("./getDB");
 
-const monoCollectionName = "Transactions";
+// const monoCollectionName = "Transactions";
 
 async function findTransactionById(transactionId) {
   const db = await getDB();
@@ -20,10 +20,10 @@ async function findAllTransactionsOfUser(userId) {
   return allTransactions;
 }
 
-async function insertTransaction(addTransaction) {
+async function insertTransaction(addTransaction,userId) {
   const db = await getDB();
   const insertResult = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .insertOne(addTransaction);
   return insertResult;
 }
