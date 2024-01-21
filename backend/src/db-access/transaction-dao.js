@@ -14,7 +14,7 @@ async function findTransactionById(transactionId) {
 async function findAllTransactionsOfUser(userId) {
   const db = await getDB();
   const allTransactions = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .find({ userId: userId })
     .toArray();
   return allTransactions;
