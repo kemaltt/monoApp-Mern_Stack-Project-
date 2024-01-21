@@ -76,7 +76,9 @@ transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
 
 transactionsRouter.delete("/delete/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
-  removeTransaction({ transactionId })
+  const userId = req.userClaims.sub;
+
+  removeTransaction({ transactionId, userId })
     .then((removeTransaction) => res.json({ removeTransaction }))
     .catch((err) => {
       console.log(err);
@@ -93,9 +95,9 @@ transactionsRouter.put(
   async (req, res) => {
     try {
       const transactionId = req.params.id;
-      // const userInfo = req.body;
+      const userId = req.userClaims.sub;
       const income = req.body.income;
-      console.log(income);
+
       const transactioUpdateInfo = {
         transactionId,
         name: req.body.name,
@@ -109,7 +111,7 @@ transactionsRouter.put(
       }
       console.log("transactioUpdateInfo", transactioUpdateInfo);
 
-      const updatedTransaction = await updateTransaction(transactioUpdateInfo);
+      const updatedTransaction = await updateTransaction(transactioUpdateInfo,userId);
       // const updatedTransaction = await updateTransaction({
       //   ...userInfo,
       //   transactionId,

@@ -28,19 +28,19 @@ async function insertTransaction(addTransaction,userId) {
   return insertResult;
 }
 
-async function deleteTransaction(transactionId) {
+async function deleteTransaction(transactionId,userId) {
   const db = await getDB();
   const removeTransaction = db
-    .collection(monoCollectionName)
+    .collection(userId)
     .findOneAndDelete({ _id: ObjectId(transactionId) });
   return removeTransaction;
 }
 
-async function editTransaction(transactionId, transactionObject) {
+async function editTransaction(transactionId,userId, transactionObject) {
   const db = await getDB();
 
   return db
-    .collection(monoCollectionName)
+    .collection(userId)
     .updateOne(
       { _id: new ObjectId(transactionId) },
       { $set: transactionObject }

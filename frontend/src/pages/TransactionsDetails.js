@@ -24,7 +24,7 @@ const TransactionsDetails = ({ walletInfo, token }) => {
       .then((detailObj) => setDetailTransaction(detailObj))
       .catch((err) => console.log(err));
   }, [token, id]);
-  console.log(detailTransaction);
+
   if (detailTransaction === undefined) {
     return <Loading />;
   }
