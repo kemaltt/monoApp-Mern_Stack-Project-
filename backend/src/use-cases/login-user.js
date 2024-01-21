@@ -11,8 +11,6 @@ async function loginUser({ email, password }) {
 
   if (!email) {
     throw new Error("E-Mail must exist.");
-  } else if (!email.match(emailVal)) {
-    throw new Error("Please enter a valid email address!");
   } 
   
   if (!password) {
