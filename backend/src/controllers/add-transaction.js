@@ -25,9 +25,6 @@ async function createNewTransaction({
     userId,
   };
 
-  console.log(income);
-  console.log(img);
-
   const user = makeUser(foundUser);
   const totalBalance = user.totalBalance;
 
@@ -39,7 +36,7 @@ async function createNewTransaction({
     userId,
     newTotalBalance
   );
-  console.log({ totalBalance, newTotalBalance });
+
   return { insertResult, updateResult };
 }
 

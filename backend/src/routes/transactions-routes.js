@@ -51,10 +51,6 @@ transactionsRouter.post(
       img = req.file.originalname;
     }
 
-    console.log(img);
-
-    console.log("userId", userId);
-
     createNewTransaction({ userId, img, ...req.body })
       .then((addedIncome) => res.status(201).json(addedIncome))
       .catch((err) => {
