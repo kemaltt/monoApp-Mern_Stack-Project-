@@ -65,8 +65,8 @@ transactionsRouter.post(
 transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
   console.log(transactionId);
-
-  showDetailTransaction({ transactionId })
+  const userId = req.userClaims.sub;
+  showDetailTransaction({ transactionId,userId })
     .then((details) => res.json(details))
     .catch((err) => {
       console.log(err);

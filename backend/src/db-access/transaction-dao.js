@@ -3,10 +3,10 @@ const { getDB } = require("./getDB");
 
 // const monoCollectionName = "Transactions";
 
-async function findTransactionById(transactionId) {
+async function findTransactionById(transactionId,userId) {
   const db = await getDB();
   const foundTransaction = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .findOne({ _id: ObjectId(transactionId) });
   return foundTransaction;
 }
