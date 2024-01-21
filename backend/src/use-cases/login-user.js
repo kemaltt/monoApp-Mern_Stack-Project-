@@ -10,15 +10,15 @@ async function loginUser({ email, password }) {
   const foundUser = await UserDAO.findByEmail(email);
 
   if (!email) {
-    throw new Error("E-Mail must exist.");
+    throw new Error("E-Mail is required.");
   } 
-  
+
   if (!password) {
-    throw new Error("Password must exist!");
+    throw new Error("Password is required.");
   } 
   
   if (!foundUser) {
-    throw new Error("Your email or password is incorrect,please try again");
+    throw new Error("Your email or password is incorrect!");
   }
 
   const user = makeUser(foundUser);
@@ -26,7 +26,7 @@ async function loginUser({ email, password }) {
 
   const correctPassword = user.passwordHash === passwordHash;
   if (!correctPassword) {
-    throw new Error("Your email or password is incorrect,please try again ");
+    throw new Error("Your email or password is incorrect!");
   }
 
   const ONE_DAY = 24 * 60 * 60;
