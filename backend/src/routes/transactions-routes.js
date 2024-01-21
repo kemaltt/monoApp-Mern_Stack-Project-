@@ -1,12 +1,12 @@
 const express = require("express");
 const multer = require("multer");
-const { showAllTransactions } = require("../use-cases/show-all-transactions");
-const { createNewTransaction } = require("../use-cases/add-transaction");
-const { removeTransaction } = require("../use-cases/delete-transaction");
-const { updateTransaction } = require("../use-cases/edit-transactions");
+const { showAllTransactions } = require("../controllers/show-all-transactions");
+const { createNewTransaction } = require("../controllers/add-transaction");
+const { removeTransaction } = require("../controllers/delete-transaction");
+const { updateTransaction } = require("../controllers/edit-transactions");
 const {
   showDetailTransaction,
-} = require("../use-cases/show-detail-transactions");
+} = require("../controllers/show-detail-transactions");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
 const doAuthMiddleware = makeDoAuthMiddleware("access");
 const transactionsRouter = express.Router();
