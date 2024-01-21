@@ -13,11 +13,13 @@ async function loginUser({ email, password }) {
     throw new Error("E-Mail must exist.");
   } else if (!email.match(emailVal)) {
     throw new Error("Please enter a valid email address!");
-  } else if (!password) {
+  } 
+  
+  if (!password) {
     throw new Error("Password must exist!");
-  } else if (!password.match(passwordVal)) {
-    throw new Error("Please enter a valid password!");
-  } else if (!foundUser) {
+  } 
+  
+  if (!foundUser) {
     throw new Error("Your email or password is incorrect,please try again");
   }
 
