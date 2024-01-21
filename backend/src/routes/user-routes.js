@@ -2,12 +2,12 @@ const express = require("express");
 const multer = require("multer");
 // const { doAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
-const { registerUser } = require("../use-cases/register-user");
-const { showAllUser } = require("../use-cases/show-all-users");
-const { loginUser } = require("../use-cases/login-user");
-const { refreshUserToken } = require("../use-cases/refresh-user-token");
-const { showMyProfile } = require("../use-cases/show-my-profile");
-const { showWallet } = require("../use-cases/show-wallet");
+const { registerUser } = require("../controllers/register-user");
+const { showAllUser } = require("../controllers/show-all-users");
+const { loginUser } = require("../controllers/login-user");
+const { refreshUserToken } = require("../controllers/refresh-user-token");
+const { showMyProfile } = require("../controllers/show-my-profile");
+const { showWallet } = require("../controllers/show-wallet");
 
 const userRouter = express.Router();
 
