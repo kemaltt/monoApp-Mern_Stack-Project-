@@ -49,7 +49,7 @@ const SignUp = () => {
 
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setIsloading(false);
       if (error.response.data.err) {
         return setMessage(<p className="text-danger" >{error.response.data.err || error.response.message }</p>);
