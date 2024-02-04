@@ -11,14 +11,14 @@ async function loginUser({ email, password }) {
 
   if (!email) {
     throw new Error("E-Mail is required.");
-  } 
+  }
 
   if (!password) {
     throw new Error("Password is required.");
-  } 
-  
+  }
+
   if (!foundUser) {
-    throw new Error("Your email or password is incorrect!");
+    return "Your email or password is incorrect!";
   }
 
   const user = makeUser(foundUser);
@@ -29,7 +29,7 @@ async function loginUser({ email, password }) {
     throw new Error("Your email or password is incorrect!");
   }
 
-  const ONE_DAY = 24 * 60 * 60;
+  const ONE_DAY = 24 * 60 * 60 * 1000;
   const accessToken = createToken(user);
   const refreshToken = createToken(user, ONE_DAY, "refresh");
   return { accessToken, refreshToken };

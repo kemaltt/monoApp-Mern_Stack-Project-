@@ -25,6 +25,7 @@ const AuthRequired = ({ token, children, setToken }) => {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           setLoading(false);
           setToken(data.token);
 

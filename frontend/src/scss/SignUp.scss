@@ -68,11 +68,13 @@
         rgba(43, 71, 252, 1) 100%
       );
       border: none;
-      padding: 2vh 35%;
+      padding: 2vh 0;
       border-radius: 50px;
+      margin-bottom: 2vh;
       color: white;
       font-size: 18px;
       font-weight: 600;
+      width: 80%;
 
       &:hover {
         background: rgb(136, 152, 255);
@@ -92,7 +94,7 @@
 
   /* Have no account? */
   p {
-    padding: 2vh 2%;
+    padding: 2vh 2% 0 2%;
     font-size: 12px;
     margin: 0 0;
 

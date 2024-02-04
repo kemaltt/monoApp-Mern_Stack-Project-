@@ -1,13 +1,11 @@
 const express = require("express");
 const multer = require("multer");
+const { showDetailTransaction,} = require("../controllers/show-detail-transactions");
+const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { showAllTransactions } = require("../controllers/show-all-transactions");
-const { createNewTransaction } = require("../controllers/add-transaction");
 const { removeTransaction } = require("../controllers/delete-transaction");
 const { updateTransaction } = require("../controllers/edit-transactions");
-const {
-  showDetailTransaction,
-} = require("../controllers/show-detail-transactions");
-const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
+const { createNewTransaction } = require("../controllers/add-transaction");
 const doAuthMiddleware = makeDoAuthMiddleware("access");
 const transactionsRouter = express.Router();
 
@@ -109,7 +107,7 @@ transactionsRouter.put(
       if (req.file) {
         transactioUpdateInfo.img = req.file.originalname;
       }
-      console.log("transactioUpdateInfo", transactioUpdateInfo);
+
 
       const updatedTransaction = await updateTransaction(transactioUpdateInfo,userId);
       // const updatedTransaction = await updateTransaction({

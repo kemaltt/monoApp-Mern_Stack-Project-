@@ -1,4 +1,4 @@
 export const apiBaseUrl =
-  process.env.REACT_APP_API_PATH === "dev"
+  process.env.REACT_APP_API_PATH === "production"
     ? "https://mono-v9zs.onrender.com"
-    : "https://mono-v9zs.onrender.com";
+    : "http://localhost:9000";

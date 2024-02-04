@@ -11,7 +11,7 @@ const Login = ({ setToken }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsloading] = useState(false);
-
+console.log(apiBaseUrl);
   const navigate = useNavigate();
 
   const handleLogIn = async (e) => {
@@ -23,16 +23,16 @@ const Login = ({ setToken }) => {
       });
       setIsloading(true);
       setTimeout(() => {
-        setToken(response.data.accessToken);
+        setToken(localStorage.setItem("token", response.data.accessToken));
         navigate("/home");
         setIsloading(false);
       }, 1000);
     } catch (error) {
-      console.log(error);
+
       if (error) {
         setIsloading(true);
         setTimeout(() => {
-          setErrorMessage(error.response.data.message.slice(7));
+          setErrorMessage(error?.response?.data.message );
           setIsloading(false);
         }, 1000);
       }
@@ -77,24 +77,25 @@ const Login = ({ setToken }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
         </div>
 
         <button onClick={handleLogIn}>
           Login
           {isLoading && (
-            <span
-              className="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <span class="spinner-border spinner-border-sm mx-1" role="status">
+          </span>
           )}
         </button>
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+    
       </motion.form>
 
       <p>
         Have No Account? <Link to="/signup">Sign Up</Link>{" "}
       </p>
+
+{errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
     </div>
   );
 };
