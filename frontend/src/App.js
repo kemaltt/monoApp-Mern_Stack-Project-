@@ -20,7 +20,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
   const [token, setToken] = useState(null);
-  console.log(token);
+
   const [replyCounter, setReplyCounter] = useState(0); // used to repload feed
   const onTransactionReply = () => setReplyCounter((prev) => prev + 1);
 

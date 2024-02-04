@@ -1,12 +1,12 @@
 const express = require("express");
 const multer = require("multer");
-const { showAllTransactions } = require("../use-cases/show-all-transactions");
-const { createNewTransaction } = require("../use-cases/add-transaction");
-const { removeTransaction } = require("../use-cases/delete-transaction");
-const { updateTransaction } = require("../use-cases/edit-transactions");
+const { showAllTransactions } = require("../controllers/show-all-transactions");
+const { createNewTransaction } = require("../controllers/add-transaction");
+const { removeTransaction } = require("../controllers/delete-transaction");
+const { updateTransaction } = require("../controllers/edit-transactions");
 const {
   showDetailTransaction,
-} = require("../use-cases/show-detail-transactions");
+} = require("../controllers/show-detail-transactions");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
 const doAuthMiddleware = makeDoAuthMiddleware("access");
 const transactionsRouter = express.Router();
@@ -51,10 +51,6 @@ transactionsRouter.post(
       img = req.file.originalname;
     }
 
-    console.log(img);
-
-    console.log("userId", userId);
-
     createNewTransaction({ userId, img, ...req.body })
       .then((addedIncome) => res.status(201).json(addedIncome))
       .catch((err) => {
@@ -69,8 +65,8 @@ transactionsRouter.post(
 transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
   console.log(transactionId);
-
-  showDetailTransaction({ transactionId })
+  const userId = req.userClaims.sub;
+  showDetailTransaction({ transactionId,userId })
     .then((details) => res.json(details))
     .catch((err) => {
       console.log(err);
@@ -80,7 +76,9 @@ transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
 
 transactionsRouter.delete("/delete/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
-  removeTransaction({ transactionId })
+  const userId = req.userClaims.sub;
+
+  removeTransaction({ transactionId, userId })
     .then((removeTransaction) => res.json({ removeTransaction }))
     .catch((err) => {
       console.log(err);
@@ -97,9 +95,9 @@ transactionsRouter.put(
   async (req, res) => {
     try {
       const transactionId = req.params.id;
-      // const userInfo = req.body;
+      const userId = req.userClaims.sub;
       const income = req.body.income;
-      console.log(income);
+
       const transactioUpdateInfo = {
         transactionId,
         name: req.body.name,
@@ -113,7 +111,7 @@ transactionsRouter.put(
       }
       console.log("transactioUpdateInfo", transactioUpdateInfo);
 
-      const updatedTransaction = await updateTransaction(transactioUpdateInfo);
+      const updatedTransaction = await updateTransaction(transactioUpdateInfo,userId);
       // const updatedTransaction = await updateTransaction({
       //   ...userInfo,
       //   transactionId,

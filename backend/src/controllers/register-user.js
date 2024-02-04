@@ -10,22 +10,23 @@ async function registerUser({ name, email, password, userImg }) {
   const foundUser = await UserDAO.findByEmail(email);
   const passwordSalt = createRandomHash();
   const passwordHash = hash(password + "" + passwordSalt);
+
   if (!name) {
-    throw new Error("Name must exist.");
+    throw new Error("Name is required.");
   } else if (!name.match(nameVal)) {
     throw new Error(
       "Name must be greater than 4 characters and less than 15 characters."
     );
   } else if (!email) {
-    throw new Error("E-Mail must exist.");
+    throw new Error("E-Mail is required.");
   } else if (!email.match(emailVal)) {
-    throw new Error("Please enter a valid email address!");
+    throw new Error("Please enter a valid email!");
   } else if (!password) {
-    throw new Error("Password must exist!");
+    throw new Error("Password is required!");
   } else if (!password.match(passwordVal)) {
     throw new Error("Please enter a valid password!");
   } else if (foundUser) {
-    throw new Error("Your email address is registered,please login");
+    throw new Error("Your email is registered,please login");
     // return "your email address is registered,please login";
   } else {
     const newUser = makeUser({

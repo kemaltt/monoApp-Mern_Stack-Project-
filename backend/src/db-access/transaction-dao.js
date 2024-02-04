@@ -1,12 +1,12 @@
 const { ObjectId } = require("mongodb");
 const { getDB } = require("./getDB");
 
-const monoCollectionName = "Transactions";
+// const monoCollectionName = "Transactions";
 
-async function findTransactionById(transactionId) {
+async function findTransactionById(transactionId,userId) {
   const db = await getDB();
   const foundTransaction = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .findOne({ _id: ObjectId(transactionId) });
   return foundTransaction;
 }
@@ -14,33 +14,33 @@ async function findTransactionById(transactionId) {
 async function findAllTransactionsOfUser(userId) {
   const db = await getDB();
   const allTransactions = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .find({ userId: userId })
     .toArray();
   return allTransactions;
 }
 
-async function insertTransaction(addTransaction) {
+async function insertTransaction(addTransaction,userId) {
   const db = await getDB();
   const insertResult = await db
-    .collection(monoCollectionName)
+    .collection(userId)
     .insertOne(addTransaction);
   return insertResult;
 }
 
-async function deleteTransaction(transactionId) {
+async function deleteTransaction(transactionId,userId) {
   const db = await getDB();
   const removeTransaction = db
-    .collection(monoCollectionName)
+    .collection(userId)
     .findOneAndDelete({ _id: ObjectId(transactionId) });
   return removeTransaction;
 }
 
-async function editTransaction(transactionId, transactionObject) {
+async function editTransaction(transactionId,userId, transactionObject) {
   const db = await getDB();
 
   return db
-    .collection(monoCollectionName)
+    .collection(userId)
     .updateOne(
       { _id: new ObjectId(transactionId) },
       { $set: transactionObject }

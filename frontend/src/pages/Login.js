@@ -21,7 +21,6 @@ const Login = ({ setToken }) => {
         email,
         password,
       });
-      console.log(response);
       setIsloading(true);
       setTimeout(() => {
         setToken(response.data.accessToken);
