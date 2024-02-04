@@ -14,7 +14,6 @@ import TopMobileBar from "./TopMobileBar";
 const EditIncome = ({ token, onReply }) => {
   // const { updateTrigger } = useAppContext();
   const { id } = useParams();
-  console.log(id);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -45,7 +44,6 @@ const EditIncome = ({ token, onReply }) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         onReply();
         // updateTrigger();
         navigate("/home");

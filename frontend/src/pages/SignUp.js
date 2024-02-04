@@ -10,8 +10,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [userImg, setUserImg] = useState();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [success, setSuccess] = useState("");
+  const [message, setMessage] = useState("");
   const [isLoading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,7 +23,7 @@ const SignUp = () => {
     if (userImg) {
       formData.append("userImg", userImg, userImg.name);
     }
-
+    setIsloading(true);
     try {
       const response = await axios({
         method: "post",
@@ -35,22 +34,25 @@ const SignUp = () => {
         },
       });
 
-      console.log(response);
-      setSuccess("account created successfuly");
-      setErrorMessage("");
-      setIsloading(true);
-      setTimeout(() => {
-        setName("");
-        setEmail("");
-        setPassword("");
+      if (response.status === 200) {
         setIsloading(false);
-        navigate("/login");
-      }, 1000);
+        setTimeout(() => {
+          setName("");
+          setEmail("");
+          setPassword("");
+          setMessage("");
+          navigate("/login");
+        }, 3000);
+      }
+      setMessage(<p className="text-success" >Account created successfuly</p>);
+
+
+
     } catch (error) {
       console.log(error);
-
+      setIsloading(false);
       if (error.response.data.err) {
-        return setErrorMessage(error.response.data.err);
+        return setMessage(<p className="text-danger" >{error.response.data.err || error.response.message }</p>);
       }
     }
   }
@@ -116,22 +118,20 @@ const SignUp = () => {
           </label>
 
           <button onClick={handleSignUp}>
-            Sign Up
+            Register
             {isLoading && (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
+              <span class="spinner-border spinner-border-sm mx-1" role="status">
+              </span>
             )}
           </button>
         </div>
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+
+
       </motion.form>
       <p>
-        Already Have An Account? <Link to="/login">Log In</Link>{" "}
+        Already Have An Account? <Link to="/login">Log In</Link>
       </p>
+      {message ? message : ""}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const Profile = ({ walletInfo, setToken }) => {
   const logOut = () => {
     fetch(apiBaseUrl + "/users/logout", { credentials: "include" });
 
-    setToken(null);
+    setToken(localStorage.removeItem('token'));
     navigate("/onboarding");
   };
 

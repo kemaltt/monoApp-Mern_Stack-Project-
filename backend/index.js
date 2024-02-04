@@ -7,12 +7,13 @@ const morgan = require("morgan");
 const { transactionsRouter } = require("./src/routes/transactions-routes");
 const { userRouter } = require("./src/routes/user-routes");
 
-// app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
+app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 //Hi
-app.use(cors());
+// app.use(cors());
 
 const oneDayInMs = 24 * 60 * 60 * 1000;
 const isLocalHost = process.env.FRONTEND_URL === "http://localhost:3000";
+console.log("isLocalHost", isLocalHost);
 app.set("trust proxy", 1); // trust first proxy
 // cookie session parser
 const cookieSessionSecret = process.env.COOKIE_SESSION_SECRET;
