@@ -9,9 +9,29 @@ export const AppProvider = (props) => {
 
   const updateTrigger = () => setTrigger((prev) => prev + 1);
 
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  const saveToken = (token) => {
+    localStorage.setItem("token", token);
+    setToken(token);
+  }
+
+  const removeToken = () => {
+    localStorage.removeItem("token");
+    setToken("");
+  }
+
+  const value = {
+    token,
+    saveToken,
+    removeToken,
+    trigger,
+    updateTrigger
+  }
+
   return (
     <AppContext.Provider
-      value={{ trigger: trigger, updateTrigger: updateTrigger }}
+      value={value}
     >
       {props.children}
     </AppContext.Provider>

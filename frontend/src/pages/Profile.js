@@ -9,13 +9,13 @@ import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
 
-const Profile = ({ walletInfo, setToken }) => {
+const Profile = ({ walletInfo }) => {
   const navigate = useNavigate();
 
   const logOut = () => {
     fetch(apiBaseUrl + "/users/logout", { credentials: "include" });
 
-    setToken(localStorage.removeItem('token'));
+    localStorage.removeItem('token');
     navigate("/onboarding");
   };
 

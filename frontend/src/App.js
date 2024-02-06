@@ -15,18 +15,18 @@ import EditExpense from "./components/EditExpense";
 import EditIncome from "./components/EditIncome";
 import AuthRequired from "./components/AuthRequired";
 import { apiBaseUrl } from "./api/api";
-import { AppProvider } from "./context/AppContext";
+import { AppProvider, useAppContext } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
-  const [token, setToken] = useState("");
+  // const [token, setToken] = useState("");
   const [replyCounter, setReplyCounter] = useState(0); // used to repload feed
   const onTransactionReply = () => setReplyCounter((prev) => prev + 1);
-
+  const appctx = useAppContext();
+  const { token, saveToken } = appctx;
   const [walletInfo, setWalletInfo] = useState(null);
   // const { trigger, updateTrigger } = useAppContext();
   // console.log(trigger);
-  console.log(token);
   useEffect(() => {
     if (!token) {
       return;
@@ -47,129 +47,113 @@ function App() {
 
 
   return (
-    <AppProvider>
-      <div className="App">
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={<Navigate to={token ? "/home" : "/onboarding"} />}
-            />
-            <Route path="/splash" element={<Splashscreen />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login setToken={setToken} onReply={onTransactionReply} />} />
+    <div className="App">
+      <BrowserRouter>
 
-            <Route
-              path="/home"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <Home
-                    token={token}
-                    setToken={setToken}
-                    walletInfo={walletInfo}
-                  />
-                </AuthRequired>
-              }
-            />
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to={token ? "/home" : "/onboarding"} />}
+          />
+          <Route path="/splash" element={<Splashscreen />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login saveToken={saveToken} onReply={onTransactionReply} />} />
 
-            <Route
-              path="/wallet"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <Wallet
-                    token={token}
-                    setToken={setToken}
-                    walletInfo={walletInfo}
-                  />
-                </AuthRequired>
-              }
-            />
+          <Route
+            path="/home"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <Home
+                  walletInfo={walletInfo}
+                />
+              </AuthRequired>
+            }
+          />
 
-            <Route
-              path="/statistic"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <Statistic
-                    token={token}
-                    setToken={setToken}
-                    walletInfo={walletInfo}
-                  />
-                </AuthRequired>
-              }
-            />
+          <Route
+            path="/wallet"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <Wallet
+                  walletInfo={walletInfo}
+                />
+              </AuthRequired>
+            }
+          />
 
-            <Route
-              path="/detail/:id"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <TransactionsDetails
-                    token={token}
-                    setToken={setToken}
-                    walletInfo={walletInfo}
-                  />
-                </AuthRequired>
-              }
-            />
+          <Route
+            path="/statistic"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <Statistic
+                  walletInfo={walletInfo}
+                  token={token}
+                />
+              </AuthRequired>
+            }
+          />
 
-            <Route
-              path="/profile"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <Profile
-                    walletInfo={walletInfo}
-                    token={token}
-                    setToken={setToken}
-                  />
-                </AuthRequired>
-              }
-            />
+          <Route
+            path="/detail/:id"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <TransactionsDetails
+                  walletInfo={walletInfo}
+                  token={token}
+                />
+              </AuthRequired>
+            }
+          />
 
-            <Route
-              path="/add"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <Add
-                    onReply={onTransactionReply}
-                    // updateTransaction={updateTransaction}
-                    token={token}
-                    setToken={setToken}
-                    walletInfo={walletInfo}
-                  />
-                </AuthRequired>
-              }
-            />
+          <Route
+            path="/profile"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <Profile
+                  walletInfo={walletInfo}
+                />
+              </AuthRequired>
+            }
+          />
 
-            <Route
-              path="/editExpense/:id"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <EditExpense
-                    onReply={onTransactionReply}
-                    // updateTransaction={updateTransaction}
-                    token={token}
-                    setToken={setToken}
-                  />
-                </AuthRequired>
-              }
-            />
-            <Route
-              path="/editIncome/:id"
-              element={
-                <AuthRequired token={token} setToken={setToken}>
-                  <EditIncome
-                    onReply={onTransactionReply}
-                    // updateTransaction={updateTransaction}
-                    token={token}
-                    setToken={setToken}
-                  />
-                </AuthRequired>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </AppProvider>
+          <Route
+            path="/add"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <Add
+                  onReply={onTransactionReply}
+                  walletInfo={walletInfo}
+                />
+              </AuthRequired>
+            }
+          />
+
+          <Route
+            path="/editExpense/:id"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <EditExpense
+                  onReply={onTransactionReply}
+                  token={token}
+                />
+              </AuthRequired>
+            }
+          />
+          <Route
+            path="/editIncome/:id"
+            element={
+              <AuthRequired token={token} setToken={saveToken}>
+                <EditIncome
+                  onReply={onTransactionReply}
+                  token={token}
+                />
+              </AuthRequired>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

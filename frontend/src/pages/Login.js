@@ -6,7 +6,7 @@ import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const Login = ({ setToken, onReply }) => {
+const Login = ({ saveToken, onReply }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,9 +30,7 @@ const Login = ({ setToken, onReply }) => {
       );
       const token = response.data.accessToken;
 
-      setToken(token);
-      token && localStorage.setItem("token", response.data.accessToken);
-
+      saveToken(token);
       // setToken(localStorage.setItem("token", response.data.accessToken));
       setIsloading(true);
       setTimeout(() => {

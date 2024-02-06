@@ -5,8 +5,6 @@ import Loading from "./Loading";
 
 const AuthRequired = ({ token, children, setToken }) => {
   const [loading, setLoading] = useState(true);
-  console.log(token);
-
   useEffect(() => {
     if (token) {
       setLoading(false);

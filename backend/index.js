@@ -9,7 +9,7 @@ const { userRouter } = require("./src/routes/user-routes");
 
 // app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 //Hi
-app.use(cors({ credentials: true }));
+app.use(cors());
 
 const oneDayInMs = 24 * 60 * 60 * 1000;
 const isLocalHost = process.env.FRONTEND_URL === "http://localhost:3000";
@@ -20,14 +20,16 @@ const cookieSessionSecret = process.env.COOKIE_SESSION_SECRET;
 if (!cookieSessionSecret) {
   throw new Error("COOKIE_SESSION_SECRET env variable is required");
 }
+
 app.use(
   cookieSession({
     name: "session",
-    secret: cookieSessionSecret,
-    httpOnly: true,
-    expires: new Date(Date.now() + oneDayInMs),
-    sameSite: isLocalHost ? "lax" : "none",
-    secure: isLocalHost ? false : true,
+    // secret: cookieSessionSecret,
+    keys: [cookieSessionSecret],
+    maxAge: oneDayInMs,
+    // expires: new Date(Date.now() + oneDayInMs),
+    // sameSite: isLocalHost ? "lax" : "none",
+    // secure: isLocalHost ? false : true,
   })
 );
 
@@ -39,9 +41,17 @@ app.use(express.json());
 app.use("/transactions", transactionsRouter);
 app.use("/users", userRouter);
 
+
 // Routes
 app.get("/", (req, res) => {
   res.send("Homepage");
 });
+
+app.get("/ping", (req, res) => {
+  console.log("req.session", req.session);
+  req.session.views = (req.session.views || 0) + 1;
+  res.end(req.session.views + ' views')
+}
+);
 
 app.listen(PORT, () => console.log(`Server Started at Port ${PORT}`));

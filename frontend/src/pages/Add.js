@@ -7,8 +7,10 @@ import { IoReceiptSharp } from "react-icons/io5";
 import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
+import { useAppContext } from "../context/AppContext";
 
-const Add = ({ token, setWalletInfo, updateTransaction, onReply }) => {
+const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
+  const { token } = useAppContext();
   const [income, setIncome] = useState(true);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState();

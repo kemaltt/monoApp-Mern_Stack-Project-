@@ -43,7 +43,7 @@ const TransactionsDetails = ({ walletInfo, token }) => {
           <div className="whiteContainer">
             {/* <img src={Icon} alt="icon" className="icon" /> */}
             <div className="transaction_icon">
-              <h3>{detailTransaction.name.charAt(0)}</h3>
+              <h3>{detailTransaction?.name?.charAt(0)}</h3>
             </div>
             <p
               style={
@@ -55,7 +55,7 @@ const TransactionsDetails = ({ walletInfo, token }) => {
             >
               {detailTransaction.income ? "Income" : "Expense"}
             </p>
-            <h2>${detailTransaction.amount.toFixed(2)} </h2>
+            <h2>${detailTransaction?.amount?.toFixed(2)} </h2>
             <div className="headlineGroup">
               <h5>Transaction details </h5>
               <img src={up} alt="up" />
@@ -98,10 +98,10 @@ const TransactionsDetails = ({ walletInfo, token }) => {
               </div>
               <p className="spending">
                 {detailTransaction.income ? "Earnings" : "Spending"}
-                <span>$ {detailTransaction.amount.toFixed(2)}</span>
+                <span>$ {detailTransaction?.amount?.toFixed(2)}</span>
               </p>
               <p className="total">
-                Total <span>$ {detailTransaction.amount.toFixed(2)}</span>
+                Total <span>$ {detailTransaction?.amount?.toFixed(2)}</span>
               </p>
 
               <div className="receipt_container">

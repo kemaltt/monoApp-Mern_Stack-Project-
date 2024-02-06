@@ -62,20 +62,19 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
 });
 userRouter.post("/login", async (req, res) => {
   try {
-    const { accessToken, refreshToken } = await loginUser({
-      email: req.body.email,
-      password: req.body.password,
-    });
-    if (refreshToken) {
-      req.session.refreshToken = refreshToken;
-      // res.cookie("session", refreshToken, {
-      //   httpOnly: true,
-      //   // secure: true,
-      //   maxAge: 1000 * 60 * 60 * 24,
-
-      // });
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Your credentials are incorrect!");
     }
-    res.json({ accessToken, refreshToken });
+
+    const { accessToken, refreshToken } = await loginUser({
+      email,
+      password
+    });
+
+    req.session.refreshToken = refreshToken;
+
+    res.json({ accessToken });
   } catch (err) {
     console.log(err);
     res.status(500).json({
