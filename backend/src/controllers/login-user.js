@@ -5,8 +5,7 @@ const { hash } = require("../utils/hash");
 const { createToken } = require("../utils/createToken");
 
 async function loginUser({ email, password }) {
-  const emailVal = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i;
-  const passwordVal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
+
   const foundUser = await UserDAO.findByEmail(email);
 
   if (!email) {
@@ -18,19 +17,21 @@ async function loginUser({ email, password }) {
   }
 
   if (!foundUser) {
-    return "Your email or password is incorrect!";
+    throw new Error("Your email or password is incorrect!");
   }
+
 
   const user = makeUser(foundUser);
   const passwordHash = hash(password + "" + user.passwordSalt);
 
   const correctPassword = user.passwordHash === passwordHash;
   if (!correctPassword) {
-    throw new Error("Your email or password is incorrect!");
+    throw new Error("Your password is incorrect!");
   }
 
-  const ONE_DAY = 24 * 60 * 60 * 1000;
+  const ONE_DAY = 24 * 60 * 60
   const accessToken = createToken(user);
+
   const refreshToken = createToken(user, ONE_DAY, "refresh");
   return { accessToken, refreshToken };
 }

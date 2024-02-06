@@ -71,7 +71,6 @@ const EditIncome = ({ token, onReply }) => {
     })
       .then((response) => response.json())
       .then((editedTransaction) => {
-        console.log(editedTransaction);
 
         if (editedTransaction.acknowledged) {
           onReply();

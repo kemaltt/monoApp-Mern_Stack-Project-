@@ -5,6 +5,7 @@ import Loading from "./Loading";
 
 const AuthRequired = ({ token, children, setToken }) => {
   const [loading, setLoading] = useState(true);
+  console.log(token);
 
   useEffect(() => {
     if (token) {
@@ -25,11 +26,11 @@ const AuthRequired = ({ token, children, setToken }) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           setLoading(false);
           setToken(data.token);
 
-          const NINE_MINUTES = 9 * 60 * 1000;
+          const NINE_MINUTES = 9 * 60 * 60 * 1000;
           const timeoutId = setTimeout(() => {
             // doRefreshToken rekursiv (Rekursion) aufrufen
             doSilentRefreshToken();

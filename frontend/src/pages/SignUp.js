@@ -52,7 +52,7 @@ const SignUp = () => {
       // console.log(error);
       setIsloading(false);
       if (error.response.data.err) {
-        return setMessage(<p className="text-danger" >{error.response.data.err || error.response.message }</p>);
+        return setMessage(<p className="text-danger" >{error.response.data.err || error.response.message}</p>);
       }
     }
   }
@@ -120,7 +120,7 @@ const SignUp = () => {
           <button onClick={handleSignUp}>
             Register
             {isLoading && (
-              <span class="spinner-border spinner-border-sm mx-1" role="status">
+              <span className="spinner-border spinner-border-sm mx-1" role="status">
               </span>
             )}
           </button>

@@ -19,16 +19,15 @@ import { AppProvider } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState("");
   const [replyCounter, setReplyCounter] = useState(0); // used to repload feed
   const onTransactionReply = () => setReplyCounter((prev) => prev + 1);
 
   const [walletInfo, setWalletInfo] = useState(null);
   // const { trigger, updateTrigger } = useAppContext();
   // console.log(trigger);
-// console.log(token);
+  console.log(token);
   useEffect(() => {
-
     if (!token) {
       return;
     }
@@ -46,8 +45,6 @@ function App() {
       });
   }, [token, replyCounter]);
 
-  // console.log(walletInfo);
-  // console.log(replyCounter);
 
   return (
     <AppProvider>
@@ -61,7 +58,7 @@ function App() {
             <Route path="/splash" element={<Splashscreen />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login setToken={setToken} />} />
+            <Route path="/login" element={<Login setToken={setToken} onReply={onTransactionReply} />} />
 
             <Route
               path="/home"

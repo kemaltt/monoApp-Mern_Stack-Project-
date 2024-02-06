@@ -9,7 +9,7 @@ const { userRouter } = require("./src/routes/user-routes");
 
 // app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 //Hi
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 const oneDayInMs = 24 * 60 * 60 * 1000;
 const isLocalHost = process.env.FRONTEND_URL === "http://localhost:3000";

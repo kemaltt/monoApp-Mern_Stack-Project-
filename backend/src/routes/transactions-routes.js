@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { showDetailTransaction,} = require("../controllers/show-detail-transactions");
+const { showDetailTransaction, } = require("../controllers/show-detail-transactions");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { showAllTransactions } = require("../controllers/show-all-transactions");
 const { removeTransaction } = require("../controllers/delete-transaction");
@@ -62,9 +62,8 @@ transactionsRouter.post(
 
 transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
-  console.log(transactionId);
   const userId = req.userClaims.sub;
-  showDetailTransaction({ transactionId,userId })
+  showDetailTransaction({ transactionId, userId })
     .then((details) => res.json(details))
     .catch((err) => {
       console.log(err);
@@ -109,7 +108,7 @@ transactionsRouter.put(
       }
 
 
-      const updatedTransaction = await updateTransaction(transactioUpdateInfo,userId);
+      const updatedTransaction = await updateTransaction(transactioUpdateInfo, userId);
       // const updatedTransaction = await updateTransaction({
       //   ...userInfo,
       //   transactionId,

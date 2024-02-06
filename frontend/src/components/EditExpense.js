@@ -21,7 +21,6 @@ const EditExpense = ({ token, onReply }) => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  console.log(id);
   useEffect(() => {
     fetch(`${apiBaseUrl}/transactions/details/${id}`, {
       headers: {
@@ -33,7 +32,6 @@ const EditExpense = ({ token, onReply }) => {
         setName(data.name);
         setAmount(data.amount);
         setCreatedAt(new Date(data.createdAt).toISOString().substring(0, 16)); //2022-05-26T12:23
-        console.log(data);
       });
   }, [token, id]);
 
@@ -50,7 +48,6 @@ const EditExpense = ({ token, onReply }) => {
         // updateTrigger();
         navigate("/home");
       });
-    console.log(id);
   };
   const editTransaction = (e) => {
     e.preventDefault();
@@ -74,7 +71,6 @@ const EditExpense = ({ token, onReply }) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.acknowledged) {
           onReply();
           // updateTrigger();

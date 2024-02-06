@@ -12,17 +12,17 @@ const Home = ({ walletInfo }) => {
   const income =
     walletInfo && Array.isArray(walletInfo.transactions)
       ? walletInfo.transactions
-          .filter((t) => t.income === true)
-          .map((t) => t.amount)
-          .reduce((sum, amount) => sum + amount, 0)
+        .filter((t) => t.income === true)
+        .map((t) => t.amount)
+        .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
   const expenses =
     walletInfo && Array.isArray(walletInfo.transactions)
       ? walletInfo.transactions
-          .filter((f) => f.income === false)
-          .map((f) => f.amount)
-          .reduce((sum, amount) => sum + amount, 0)
+        .filter((f) => f.income === false)
+        .map((f) => f.amount)
+        .reduce((sum, amount) => sum + amount, 0)
       : 0;
   // console.log(income);
   // console.log(expenses);
@@ -83,7 +83,7 @@ const Home = ({ walletInfo }) => {
           </div>
           <div className="transactionsHistory">
             <div>
-              {walletInfo.transactions.map((ele, index) => (
+              {walletInfo?.transactions?.map((ele, index) => (
                 <Link to={`/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"

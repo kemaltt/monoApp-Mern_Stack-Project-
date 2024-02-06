@@ -19,7 +19,6 @@ userRouter.get("/allUsers", doAuthMiddleware, async (_, res) => {
     const allUsers = await showAllUser();
     res.status(200).json(allUsers);
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: {
         message: error
@@ -55,7 +54,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
     // const user = await registerUser({ ...userInfo, userImg });
     // res.json(user);
   } catch (error) {
-    console.log("register route", error);
+
     res.status(500).json({
       err: error.message || "Unknown error while registering new user.",
     });
@@ -69,6 +68,12 @@ userRouter.post("/login", async (req, res) => {
     });
     if (refreshToken) {
       req.session.refreshToken = refreshToken;
+      // res.cookie("session", refreshToken, {
+      //   httpOnly: true,
+      //   // secure: true,
+      //   maxAge: 1000 * 60 * 60 * 24,
+
+      // });
     }
     res.json({ accessToken, refreshToken });
   } catch (err) {
@@ -87,7 +92,7 @@ userRouter.get("/showWallet", doAuthMiddleware, async (req, res) => {
   try {
     const userId = req.userClaims.sub;
     const userWallet = await showWallet({ userId });
-    console.log(userWallet);
+
     res.status(200).json(userWallet);
   } catch (err) {
     res

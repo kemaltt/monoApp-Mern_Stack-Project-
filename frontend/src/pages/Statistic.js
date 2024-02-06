@@ -202,7 +202,7 @@ const Statistic = ({ walletInfo }) => {
           </div>
           <div className="transactionsHistory">
             <div>
-              {walletInfo.transactions.map((ele, index) => (
+              {walletInfo?.transactions?.map((ele, index) => (
                 <Link to={`/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"
