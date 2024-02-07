@@ -1,8 +1,8 @@
-const { UserDAO } = require("../db-access");
-const { makeUser } = require("../domain/User");
+const { UserDAO } = require("../../db-access");
+const { makeUser } = require("../../domain/User");
 const jwt = require("jsonwebtoken");
-const { hash } = require("../utils/hash");
-const { createToken } = require("../utils/createToken");
+const { hash } = require("../../utils/hash");
+const { createToken } = require("../../utils/createToken");
 
 async function loginUser({ email, password }) {
 

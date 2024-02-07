@@ -1,4 +1,4 @@
-const { UserDAO } = require("../db-access");
+const { UserDAO } = require("../../db-access");
 
 async function showAllUser() {
   const usersArray = await UserDAO.findAll();

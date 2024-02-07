@@ -1,4 +1,4 @@
-const { TransactionsDAO } = require("../db-access");
+const { TransactionsDAO } = require("../../db-access");
 
 async function showAllTransactions({ userId }) {
   const transactions = await TransactionsDAO.findAllTransactionsOfUser(userId);
@@ -14,5 +14,5 @@ async function showAllTransactions({ userId }) {
 }
 
 module.exports = {
-  showAllTransactions,
+  showAllTransactions
 };

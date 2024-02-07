@@ -1,6 +1,5 @@
-const { TransactionsDAO } = require("../db-access");
-const { UserDAO } = require("../db-access");
-const { makeUser } = require("../domain/User");
+const { TransactionsDAO, UserDAO } = require("../../db-access");
+const { makeUser } = require("../../domain/User");
 
 async function createNewTransaction({
   userId,
@@ -28,7 +27,7 @@ async function createNewTransaction({
   const user = makeUser(foundUser);
   const totalBalance = user.totalBalance;
 
-  const insertResult = await TransactionsDAO.insertTransaction(transaction,userId);
+  const insertResult = await TransactionsDAO.insertTransaction(transaction, userId);
   const newTotalBalance = income
     ? totalBalance + Number(amount)
     : totalBalance - Number(amount);

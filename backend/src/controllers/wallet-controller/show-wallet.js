@@ -1,5 +1,5 @@
-const { UserDAO, TransactionsDAO } = require("../db-access");
-const { makeUser } = require("../domain/User");
+const { UserDAO, TransactionsDAO } = require("../../db-access");
+const { makeUser } = require("../../domain/User");
 
 async function showWallet({ userId }) {
   const foundUser = await UserDAO.findById(userId);

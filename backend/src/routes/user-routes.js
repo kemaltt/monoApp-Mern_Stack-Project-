@@ -2,12 +2,12 @@ const express = require("express");
 const multer = require("multer");
 // const { doAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
-const { registerUser } = require("../controllers/register-user");
-const { showAllUser } = require("../controllers/show-all-users");
-const { loginUser } = require("../controllers/login-user");
-const { refreshUserToken } = require("../controllers/refresh-user-token");
-const { showMyProfile } = require("../controllers/show-my-profile");
-const { showWallet } = require("../controllers/show-wallet");
+const { showWallet } = require("../controllers/wallet-controller/show-wallet");
+const { showMyProfile } = require("../controllers/user-controller/show-my-profile");
+const { refreshUserToken } = require("../controllers/user-controller/refresh-user-token");
+const { loginUser } = require("../controllers/user-controller/login-user");
+const { registerUser } = require("../controllers/user-controller/register-user");
+const { showAllUser } = require("../controllers/user-controller/show-all-users");
 
 const userRouter = express.Router();
 
@@ -63,8 +63,13 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
 userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      throw new Error("Your credentials are incorrect!");
+
+    if (!email) {
+      throw new Error("E-Mail is required.");
+    }
+
+    if (!password) {
+      throw new Error("Password is required.");
     }
 
     const { accessToken, refreshToken } = await loginUser({

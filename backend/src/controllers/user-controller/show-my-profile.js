@@ -1,5 +1,5 @@
-const { UserDAO } = require("../db-access");
-const { makeUser } = require("../domain/User");
+const { UserDAO } = require("../../db-access");
+const { makeUser } = require("../../domain/User");
 // const {
 //   enrichPostsWithUserInfos,
 // } = require("./background-services/enrich-posts-with-userinfos");
