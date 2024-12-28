@@ -12,7 +12,7 @@ const { userRouter } = require("./src/routes/user-routes");
 app.use(cors());
 
 const oneDayInMs = 24 * 60 * 60 * 1000;
-const isLocalHost = process.env.FRONTEND_URL === "http://localhost:3000";
+// const isLocalHost = process.env.FRONTEND_URL === "http://localhost:3000";
 app.set("trust proxy", 1); // trust first proxy
 // cookie session parser
 const cookieSessionSecret = process.env.COOKIE_SESSION_SECRET;
