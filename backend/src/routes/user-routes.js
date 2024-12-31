@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer");
+// const multer = require("multer");
 // const { doAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { showWallet } = require("../controllers/wallet-controller/show-wallet");
@@ -8,6 +8,7 @@ const { refreshUserToken } = require("../controllers/user-controller/refresh-use
 const { loginUser } = require("../controllers/user-controller/login-user");
 const { registerUser } = require("../controllers/user-controller/register-user");
 const { showAllUser } = require("../controllers/user-controller/show-all-users");
+const {  uploadToFirebase, upload } = require("../services/file-upload.service");
 
 const userRouter = express.Router();
 
@@ -29,23 +30,36 @@ userRouter.get("/allUsers", doAuthMiddleware, async (_, res) => {
   }
 });
 
-const storage = multer.diskStorage({
-  destination: function (_, _, cb) {
-    cb(null, "uploads/profile");
-  },
-  filename: function (_, file, cb) {
-    cb(null, file.originalname); //Appending extension
-  },
-});
-const upload = multer({ storage });
+// const storage = multer.diskStorage({
+//   destination: function (_, _, cb) {
+//     cb(null, "uploads/profile");
+//   },
+//   filename: function (_, file, cb) {
+//     cb(null, file.originalname); //Appending extension
+//   },
+// });
+// const upload = multer({ storage });
 const uploadMiddleware = upload.single("userImg");
 
 userRouter.post("/register", uploadMiddleware, async (req, res) => {
   try {
     const userInfo = req.body;
+    // Token'dan kullanıcı ID'sini al
+    // const authHeader = req.headers["authorization"];
+    // const token = authHeader && authHeader.split(" ")[1];
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const userId = decoded?.id;
+    const userId = 12345;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     if (req.file) {
-      userImg = req.file.originalname;
-      const user = await registerUser({ ...userInfo, userImg });
+      const file = req.file; // req.file'deki dosyayı değişkene ata
+      const uploadedFile = await uploadToFirebase(file, "userImg", null, userId);
+      console.log('file uploaded', uploadedFile);
+      
+      const user = await registerUser({ ...userInfo, userImg: uploadedFile });
       res.json(user);
     } else {
       const user = await registerUser({ ...userInfo });
@@ -60,6 +74,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
     });
   }
 });
+
 userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;

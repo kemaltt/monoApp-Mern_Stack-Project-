@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiBaseUrl } from "../api/api";
-import { BiImageAdd } from "react-icons/bi";
+import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import { motion } from "framer-motion";
 import axios from "axios";
 
@@ -9,12 +9,32 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [userImg, setUserImg] = useState();
+  const [userImg, setUserImg] = useState(null);
+  const [previewImg, setPreviewImg] = useState(null);
   const [message, setMessage] = useState("");
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSignUp(e) {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUserImg(file);
+
+      // Create an image preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImg(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setUserImg(null);
+    setPreviewImg(null);
+  };
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
@@ -23,39 +43,35 @@ const SignUp = () => {
     if (userImg) {
       formData.append("userImg", userImg, userImg.name);
     }
-    setIsloading(true);
+
+    setIsLoading(true);
     try {
       const response = await axios({
         method: "post",
         url: `${apiBaseUrl}/users/register`,
         data: formData,
         headers: {
-          "Content-Type": `multipart/form-data; `,
+          "Content-Type": "multipart/form-data",
         },
       });
 
       if (response.status === 200) {
-        setIsloading(false);
+        setIsLoading(false);
+        setMessage(<p className="text-success">Account created successfully</p>);
         setTimeout(() => {
           setName("");
           setEmail("");
           setPassword("");
-          setMessage("");
+          removeImage();
           navigate("/login");
         }, 3000);
       }
-      setMessage(<p className="text-success" >Account created successfuly</p>);
-
-
-
     } catch (error) {
-      // console.log(error);
-      setIsloading(false);
-      if (error.response.data.err) {
-        return setMessage(<p className="text-danger" >{error.response.data.err || error.response.message}</p>);
-      }
+      setIsLoading(false);
+      const errorMsg = error.response?.data?.err || error.response?.message || "An error occurred";
+      setMessage(<p className="text-danger">{errorMsg}</p>);
     }
-  }
+  };
 
   return (
     <div className="signUp">
@@ -78,7 +94,6 @@ const SignUp = () => {
             name="name"
             id="name"
             placeholder="Full Name"
-            min="5"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -90,7 +105,6 @@ const SignUp = () => {
             name="email"
             id="email"
             placeholder="Email"
-            min="5"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -102,36 +116,36 @@ const SignUp = () => {
             name="password"
             id="password"
             placeholder="Password"
-            min="8"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <label htmlFor="picture">PROFILE PICTURE</label>
-          <label className="custom-file-upload">
-            <input
-              type="file"
-              onChange={(e) => setUserImg(e.target.files[0])}
-            />
-            <BiImageAdd size={24} /> Add Profile Foto
-          </label>
+          {previewImg ? (
+            <div className="image-preview">
+              <img src={previewImg} alt="Preview" />
+              <BiXCircle className="remove-icon" size={24} onClick={removeImage} />
+            </div>
+          ) : (
+            <label className="custom-file-upload">
+              <input type="file" accept="image/*" onChange={handleImageChange} />
+              <BiImageAdd size={24} /> Add Profile Photo
+            </label>
+          )}
 
-          <button onClick={handleSignUp}>
+          <button onClick={handleSignUp} disabled={isLoading}>
             Register
             {isLoading && (
-              <span className="spinner-border spinner-border-sm mx-1" role="status">
-              </span>
+              <span className="spinner-border spinner-border-sm mx-1" role="status"></span>
             )}
           </button>
         </div>
-
-
       </motion.form>
       <p>
         Already Have An Account? <Link to="/login">Log In</Link>
       </p>
-      {message ? message : ""}
+      {message && <div>{message}</div>}
     </div>
   );
 };
