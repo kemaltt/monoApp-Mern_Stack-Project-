@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import left from "../img/chevron-left.png";
 import Delete from "../components/Icons/Delete";
 import Nav from "../components/Nav";
@@ -9,46 +9,51 @@ import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
-// import { useAppContext } from "../context/AppContext";
+import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
+
+
+
 
 const EditExpense = ({ token, onReply }) => {
-  // const { updateTrigger } = useAppContext();
 
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [createdAt, setCreatedAt] = useState("");
+  const { id } = useParams();
+
+  const [deleteFromTransaction] = useDeleteFromTransactionMutation()
+  const [getTransactionById] = useGetTransactionByIdMutation()
+
+  const [name, setName] = useState();
+  const [amount, setAmount] = useState();
+  const [createdAt, setCreatedAt] = useState();
   const [img, setReceipt] = useState();
   const navigate = useNavigate();
 
-  const { id } = useParams();
   useEffect(() => {
-    fetch(`${apiBaseUrl}/transactions/details/${id}`, {
-      headers: {
-        token: "JWT " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setName(data.name);
-        setAmount(data.amount);
-        setCreatedAt(new Date(data.createdAt).toISOString().substring(0, 16)); //2022-05-26T12:23
-      });
-  }, [token, id]);
+    const fetchData = async () => {
+      try {
+        const response = await getTransactionById({ id, token }).unwrap();
+        if (response) {
+          setName(response.name || "");
+          setAmount(response.amount || "");
+          setCreatedAt(
+            response.createdAt
+              ? new Date(response.createdAt).toISOString().substring(0, 16)
+              : ""
+          );
+          setReceipt(response.img || null);
+        }
+      } catch (error) {
+        console.error("Error fetching transaction data:", error);
+      }
+    };
 
-  const deleteTransaction = () => {
-    fetch(`${apiBaseUrl}/transactions/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        token: "JWT " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        onReply();
-        // updateTrigger();
-        navigate("/home");
-      });
+    fetchData();
+  }, [id, token, getTransactionById]);
+
+  const deleteTransaction = async () => {
+    await deleteFromTransaction({ id, token }).unwrap()
+    navigate("/home");
   };
+
   const editTransaction = (e) => {
     e.preventDefault();
 
@@ -61,7 +66,7 @@ const EditExpense = ({ token, onReply }) => {
       formData.append("img", img, img.name);
     }
 
-    fetch(`${apiBaseUrl}/transactions/edit/${id}`, {
+    fetch(`${apiBaseUrl}/transaction/edit/${id}`, {
       method: "PUT",
       headers: {
         token: "JWT " + token,

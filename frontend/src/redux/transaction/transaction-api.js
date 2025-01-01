@@ -7,7 +7,7 @@ export const transactionApi = createApi({
   reducerPath: 'transactionApi',
   baseQuery: fetchBaseQuery({ baseUrl: apiBaseUrl }),
   endpoints: (builder) => ({
-    getTransactions: builder.query({
+    getTransactions: builder.mutation({
       query: (token) => ({
         url: '/transactions',
         method: 'GET',
@@ -16,7 +16,7 @@ export const transactionApi = createApi({
         },
       }),
     }),
-    getTransactionById: builder.query({
+    getTransactionById: builder.mutation({
       query: ({ id, token }) => ({
         url: `/transaction/${id}`,
         headers: {
@@ -25,27 +25,27 @@ export const transactionApi = createApi({
       }),
     }),
     addToTransaction: builder.mutation({
-      query: ({ token, data }) => ({
-        url: `/add-to-cart`,
+      query: ({ token, formData }) => ({
+        url: `/transaction/add`,
         method: 'POST',
-        body: data,
+        body: formData,
         headers: {
-          Authorization: `Bearer ${token}`,
+          token: `JWT ${token}`,
         },
       }),
     }),
     deleteFromTransaction: builder.mutation({
-      query: ({ token, id }) => ({
-        url: `/delete-from-cart/${id}`,
+      query: ({ id, token }) => ({
+        url: `/transaction/delete/${id}`,
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`,
+          token: `JWT ${token}`,
         },
       })
     }),
     updateTransactionById: builder.mutation({
       query: ({ id, token, data }) => ({
-        url: `/update-cart/${id}`,
+        url: `/transaction/edit/${id}`,
         method: 'PATCH',
         body: data,
         headers: {
@@ -56,4 +56,4 @@ export const transactionApi = createApi({
   }),
 })
 
-export const {useGetTransactionsQuery,useGetTransactionsMutation,useGetTransactionByIdQuery,useAddToTransactionMutation } = transactionApi
+export const { useGetTransactionsMutation, useGetTransactionByIdMutation, useAddToTransactionMutation, useDeleteFromTransactionMutation } = transactionApi

@@ -35,7 +35,7 @@ const upload = multer({ storage });
 const uploadMiddleware = upload.single("img");
 
 transactionsRouter.post(
-  "/add",
+  "/transaction/add",
   uploadMiddleware,
   doAuthMiddleware,
   (req, res) => {
@@ -71,7 +71,7 @@ transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
     });
 });
 
-transactionsRouter.delete("/delete/:id", doAuthMiddleware, (req, res) => {
+transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
   const userId = req.userClaims.sub;
 
@@ -86,7 +86,7 @@ transactionsRouter.delete("/delete/:id", doAuthMiddleware, (req, res) => {
 });
 
 transactionsRouter.put(
-  "/edit/:id",
+  "/transaction/edit/:id",
   uploadMiddleware,
   doAuthMiddleware,
   async (req, res) => {

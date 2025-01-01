@@ -4,13 +4,16 @@ import left from "../img/chevron-left.png";
 import dots from "../img/threeDots.png";
 import Nav from "../components/Nav";
 import { IoReceiptSharp } from "react-icons/io5";
-import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
 import { useAppContext } from "../context/AppContext";
+import { useAddToTransactionMutation} from "../redux/transaction/transaction-api";
 
 const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
   const { token } = useAppContext();
+  const [addToTransaction] = useAddToTransactionMutation()
+  // const [getTransactions] = useGetTransactionsMutation();
+
   const [income, setIncome] = useState(true);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState();
@@ -18,9 +21,8 @@ const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
   const [img, setReceipt] = useState("");
   const navigate = useNavigate();
 
-  function handleTransaction(e) {
+  async function handleTransaction(e) {
     e.preventDefault();
-    console.log(income);
     if (!name) {
       alert("enter name!");
     } else if (!amount) {
@@ -43,19 +45,26 @@ const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
         ? formData.append("income", true)
         : formData.append("income", false);
 
-      fetch(`${apiBaseUrl}/transactions/add`, {
-        method: "POST",
-        headers: { token: "JWT " + token },
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then(
-          (addedTransaction) =>
-            setWalletInfo((previous) => [...previous, addedTransaction]),
-          onReply()
-        );
 
+      await addToTransaction({ formData, token }).unwrap()
       navigate("/home");
+
+
+
+
+      // fetch(`${apiBaseUrl}/transaction/add`, {
+      //   method: "POST",
+      //   headers: { token: "JWT " + token },
+      //   body: formData,
+      // })
+      //   .then((response) => response.json())
+      //   .then(
+      //     (addedTransaction) =>
+      //       setWalletInfo((previous) => [...previous, addedTransaction]),
+      //     onReply()
+      //   );
+
+      // navigate("/home");
     }
   }
 

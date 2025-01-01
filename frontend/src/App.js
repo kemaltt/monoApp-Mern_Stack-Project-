@@ -1,6 +1,6 @@
 import "./App.scss";
 import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Home from "./pages/Home";
 import Wallet from "./pages/Wallet";
 import Statistic from "./pages/Statistic";
@@ -14,7 +14,6 @@ import Add from "./pages/Add";
 import EditExpense from "./components/EditExpense";
 import EditIncome from "./components/EditIncome";
 import AuthRequired from "./components/AuthRequired";
-import { apiBaseUrl } from "./api/api";
 import { useAppContext } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -28,23 +27,23 @@ function App() {
   const [walletInfo, setWalletInfo] = useState(null);
   // const { trigger, updateTrigger } = useAppContext();
   // console.log(trigger);
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!token) {
+  //     return;
+  //   }
 
-    fetch(`${apiBaseUrl}/transactions`, {
-      method: "GET",
-      headers: {
-        token: "JWT " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((walletResult) => {
-        setWalletInfo(walletResult);
+  //   fetch(`${apiBaseUrl}/transactions`, {
+  //     method: "GET",
+  //     headers: {
+  //       token: "JWT " + token,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((walletResult) => {
+  //       setWalletInfo(walletResult);
 
-      });
-  }, [token, replyCounter]);
+  //     });
+  // }, [token, replyCounter]);
 
 
   return (

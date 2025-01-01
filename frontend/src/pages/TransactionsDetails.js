@@ -7,14 +7,18 @@ import Loading from "../components/Loading";
 import { apiBaseUrl } from "../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import TopMobileBar from "../components/TopMobileBar";
-import { useGetTransactionByIdQuery } from "../redux/transaction/transaction-api";
+import { useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
+import { useEffect } from "react";
 
 const TransactionsDetails = ({ token }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: detailTransaction, isLoading } = useGetTransactionByIdQuery({ id, token });
+  // const { data: detailTransaction, isLoading } = useGetTransactionByIdQuery({ id, token });
+  const [getTransactionById, { data: detailTransaction, isLoading }] = useGetTransactionByIdMutation()
 
-
+  useEffect(() => {
+    getTransactionById({ id, token })
+  }, [getTransactionById, id, token]);
   // useEffect(() => {
   //   fetch(`${apiBaseUrl}/transaction/${id}`, {
   //     headers: {

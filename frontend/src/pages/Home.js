@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import arrowUp from "../img/ArrowUp.png";
 import threeDots from "../img/threeDots.png";
@@ -6,22 +6,22 @@ import ArrowUpIcon from "../components/Icons/ArrowUpIcon";
 import ArrowDownIcon from "../components/Icons/ArrowDownIcon";
 import Nav from "../components/Nav";
 import { motion } from "framer-motion";
-import { useGetTransactionsQuery } from "../redux/transaction/transaction-api";
+import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
 // import TopMobileBar from "../components/TopMobileBar";
 
-const Home = ({token}) => {
+const Home = ({ token }) => {
 
   // const [getTransactions, { data }] = useGetTransactionsMutation()
   // useGetTransactionsQuery(token);
-  const { data } = useGetTransactionsQuery(token);
+  const [getTransactions, { data }] = useGetTransactionsMutation();
 
-  // useEffect(() => {
-  //   const getAllTransactions = async () => {
-  //     if (token)
-  //     await getTransactions(token);
-  //   }
-  //   getAllTransactions();
-  // }, [getTransactions, token]);
+  useEffect(() => {
+    const getAllTransactions = async () => {
+      if (token)
+        await getTransactions(token);
+    }
+    getAllTransactions();
+  }, [getTransactions, token]);
 
   const income =
     data?.transactions && Array.isArray(data?.transactions)
@@ -98,7 +98,7 @@ const Home = ({token}) => {
           <div className="transactionsHistory">
             <div>
               {data.transactions?.map((ele, index) => (
-                <Link to={`/transaction/detail/${ele._id}`}>
+                <Link key={index} to={`/transaction/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"
                     key={index}

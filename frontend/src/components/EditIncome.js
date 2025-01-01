@@ -9,11 +9,14 @@ import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
+import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
 // import { useAppContext } from "../context/AppContext";
 
 const EditIncome = ({ token, onReply }) => {
   // const { updateTrigger } = useAppContext();
   const { id } = useParams();
+    const [deleteFromTransaction] = useDeleteFromTransactionMutation()
+    const [getTransactionById] = useGetTransactionByIdMutation()
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -21,33 +24,30 @@ const EditIncome = ({ token, onReply }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${apiBaseUrl}/transactions/details/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        token: "JWT " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setName(data.name);
-        setAmount(data.amount);
-        setCreatedAt(new Date(data.createdAt).toISOString().substring(0, 16)); //2022-05-26T12:23
-      });
-  }, [token, id]);
+    const fetchData = async () => {
+      try {
+        const response = await getTransactionById({ id, token }).unwrap();
+        if (response) {
+          setName(response.name || "");
+          setAmount(response.amount || "");
+          setCreatedAt(
+            response.createdAt
+              ? new Date(response.createdAt).toISOString().substring(0, 16)
+              : ""
+          );
+          setReceipt(response.img || null);
+        }
+      } catch (error) {
+        console.error("Error fetching transaction data:", error);
+      }
+    };
 
-  const deleteTransaction = () => {
-    fetch(`${apiBaseUrl}/transactions/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        token: "JWT " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        onReply();
-        // updateTrigger();
-        navigate("/home");
-      });
+    fetchData();
+  }, [id, token, getTransactionById]);
+
+  const deleteTransaction = async () => {
+    await deleteFromTransaction({ id, token }).unwrap()
+    navigate("/home");
   };
   const editTransaction = (e) => {
     e.preventDefault();
