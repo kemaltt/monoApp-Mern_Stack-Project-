@@ -16,11 +16,14 @@
     animation: guy 3s infinite ease-in-out;
     z-index: 999;
   }
+
   @keyframes guy {
+
     0%,
     100% {
       transform: translateY(0px);
     }
+
     50% {
       transform: translateY(-20px);
     }
@@ -53,29 +56,33 @@
         justify-content: flex-start;
         text-align: left;
         padding: 1.5vh 4%;
+        margin-bottom: 1vh;
         width: 100%;
         border-radius: 8px;
         border: #dddddd 1px solid;
       }
 
-      /* Email Input */
-      input:nth-of-type(1) {
-        margin-bottom: 3vh;
+      span {
+     color: red;
+      font-size: 12px;
       }
 
-      /* Password Input */
-      input:nth-of-type(2) {
-        margin-bottom: 4vh;
-      }
+      /* Email Input */
+      // input:nth-of-type(1) {
+      //   margin-bottom: 3vh;
+      // }
+
+      // /* Password Input */
+      // input:nth-of-type(2) {
+      //   margin-bottom: 4vh;
+      // }
     }
 
     button {
       background: rgb(136, 152, 255);
-      background: linear-gradient(
-        180deg,
-        rgba(136, 152, 255, 1) 0%,
-        rgba(43, 71, 252, 1) 100%
-      );
+      background: linear-gradient(180deg,
+          rgba(136, 152, 255, 1) 0%,
+          rgba(43, 71, 252, 1) 100%);
       border: none;
       padding: 2vh 0;
       border-radius: 50px;
@@ -88,11 +95,9 @@
 
     button:hover {
       background: rgb(136, 152, 255);
-      background: linear-gradient(
-        90deg,
-        rgba(136, 152, 255, 1) 0%,
-        rgba(43, 71, 252, 1) 100%
-      );
+      background: linear-gradient(90deg,
+          rgba(136, 152, 255, 1) 0%,
+          rgba(43, 71, 252, 1) 100%);
 
       a {
         text-decoration: none;

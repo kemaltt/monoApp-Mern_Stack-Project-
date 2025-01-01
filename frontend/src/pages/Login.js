@@ -1,52 +1,31 @@
 import "../scss/Login.scss";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Man from "../img/man.png";
-import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { useLoginMutation } from "../redux/auth/auth-api";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const Login = ({ saveToken, onReply }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsloading] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogIn = async (e) => {
-    e.preventDefault();
-    const header = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    try {
-      const response = await axios.post(`${apiBaseUrl}/users/login`, {
-        email,
-        password,
-      },
-        header
-      );
-      const token = response.data.accessToken;
-
-      saveToken(token);
-      // setToken(localStorage.setItem("token", response.data.accessToken));
-      setIsloading(true);
+  const handleLogIn = async (data) => {
+    const response = await login(data); // data contains email and password from the form
+    if (response.error) {
+      setErrorMessage(response.error.data.message); // Display error message
+    } else {
+      saveToken(response.data.accessToken);
+      onReply();
       setTimeout(() => {
         navigate("/home");
-        setIsloading(false);
-
-      }, 1000);
-    } catch (error) {
-      console.log(error);
-      if (error) {
-        setIsloading(true);
-        setTimeout(() => {
-          setErrorMessage(error?.response?.data.message);
-          setIsloading(false);
-        }, 1000);
-      }
+      }, 500);
     }
   };
 
@@ -55,6 +34,7 @@ const Login = ({ saveToken, onReply }) => {
       <h1>Login</h1>
       <img src={Man} alt="the määään" />
       <motion.form
+        onSubmit={handleSubmit(handleLogIn)} // Bind the form submit handler
         initial={{ y: "-8vh" }}
         animate={{ y: 10 }}
         transition={{
@@ -69,44 +49,59 @@ const Login = ({ saveToken, onReply }) => {
           <label htmlFor="email">EMAIL</label>
           <input
             type="email"
-            name="email"
             id="email"
             placeholder="Email"
-            min="5"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address",
+              },
+            })}
           />
+          {errors.email && (
+            <span>{errors.email.message}</span>
+          )}
+
           <label htmlFor="password">PASSWORD</label>
           <input
             type="password"
-            name="password"
             id="password"
             placeholder="Password"
-            min="8"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
           />
-
+          {errors.password && (
+            <span >{errors.password.message}</span>
+          )}
         </div>
 
-        <button onClick={handleLogIn}>
+        <button type="submit" className="btn btn-primary w-100">
           Login
           {isLoading && (
-            <span className="spinner-border spinner-border-sm mx-1" role="status">
-            </span>
+            <span
+              className="spinner-border spinner-border-sm mx-1"
+              role="status"
+            ></span>
           )}
         </button>
 
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {errorMessage}
+          </div>
+        )}
       </motion.form>
 
-      <p>
-        Have No Account? <Link to="/signup">Sign Up</Link>{" "}
+      <p className="mt-3">
+        Have No Account? <Link to="/signup">Sign Up</Link>
       </p>
-
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-
     </div>
   );
 };
