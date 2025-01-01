@@ -44,16 +44,16 @@ export const transactionApi = createApi({
       })
     }),
     updateTransactionById: builder.mutation({
-      query: ({ id, token, data }) => ({
+      query: ({ id, token, formData }) => ({
         url: `/transaction/edit/${id}`,
-        method: 'PATCH',
-        body: data,
+        method: 'PUT',
+        body: formData,
         headers: {
-          Authorization: `Bearer ${token}`,
+          token: `Bearer ${token}`,
         },
       }),
     }),
   }),
 })
 
-export const { useGetTransactionsMutation, useGetTransactionByIdMutation, useAddToTransactionMutation, useDeleteFromTransactionMutation } = transactionApi
+export const { useGetTransactionsMutation, useGetTransactionByIdMutation, useAddToTransactionMutation, useDeleteFromTransactionMutation,useUpdateTransactionByIdMutation } = transactionApi

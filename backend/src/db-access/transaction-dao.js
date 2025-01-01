@@ -3,7 +3,7 @@ const { getDB } = require("./getDB");
 
 // const monoCollectionName = "Transactions";
 
-async function findTransactionById(transactionId,userId) {
+async function findTransactionById(transactionId, userId) {
   const db = await getDB();
   const foundTransaction = await db
     .collection(userId)
@@ -20,7 +20,7 @@ async function findAllTransactionsOfUser(userId) {
   return allTransactions;
 }
 
-async function insertTransaction(addTransaction,userId) {
+async function insertTransaction(addTransaction, userId) {
   const db = await getDB();
   const insertResult = await db
     .collection(userId)
@@ -28,7 +28,7 @@ async function insertTransaction(addTransaction,userId) {
   return insertResult;
 }
 
-async function deleteTransaction(transactionId,userId) {
+async function deleteTransaction(transactionId, userId) {
   const db = await getDB();
   const removeTransaction = db
     .collection(userId)
@@ -36,9 +36,8 @@ async function deleteTransaction(transactionId,userId) {
   return removeTransaction;
 }
 
-async function editTransaction(transactionId,userId, transactionObject) {
+async function editTransaction(transactionId, userId, transactionObject) {
   const db = await getDB();
-
   return db
     .collection(userId)
     .updateOne(

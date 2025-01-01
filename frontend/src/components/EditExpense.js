@@ -5,11 +5,10 @@ import Delete from "../components/Icons/Delete";
 import Nav from "../components/Nav";
 import "../scss/EditExpense.scss";
 import { useNavigate, useParams } from "react-router-dom";
-import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
-import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
+import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation, useUpdateTransactionByIdMutation } from "../redux/transaction/transaction-api";
 
 
 
@@ -20,6 +19,7 @@ const EditExpense = ({ token, onReply }) => {
 
   const [deleteFromTransaction] = useDeleteFromTransactionMutation()
   const [getTransactionById] = useGetTransactionByIdMutation()
+  const [updateTransactionById] = useUpdateTransactionByIdMutation()
 
   const [name, setName] = useState();
   const [amount, setAmount] = useState();
@@ -54,7 +54,7 @@ const EditExpense = ({ token, onReply }) => {
     navigate("/home");
   };
 
-  const editTransaction = (e) => {
+  const editTransaction = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -66,22 +66,8 @@ const EditExpense = ({ token, onReply }) => {
       formData.append("img", img, img.name);
     }
 
-    fetch(`${apiBaseUrl}/transaction/edit/${id}`, {
-      method: "PUT",
-      headers: {
-        token: "JWT " + token,
-      },
-
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.acknowledged) {
-          onReply();
-          // updateTrigger();
-          navigate("/home");
-        }
-      });
+    await updateTransactionById({ id, token, formData }).unwrap()
+    navigate("/home");
   };
 
   return (

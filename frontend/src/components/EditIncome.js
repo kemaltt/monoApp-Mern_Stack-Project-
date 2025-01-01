@@ -61,7 +61,7 @@ const EditIncome = ({ token, onReply }) => {
       formData.append("img", img, img.name);
     }
 
-    fetch(`${apiBaseUrl}/transactions/edit/${id}`, {
+    fetch(`${apiBaseUrl}/transaction/edit/${id}`, {
       method: "PUT",
       headers: {
         token: "JWT " + token,

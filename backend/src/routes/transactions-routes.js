@@ -95,7 +95,7 @@ transactionsRouter.put(
       const userId = req.userClaims.sub;
       const income = req.body.income;
 
-      const transactioUpdateInfo = {
+      const transactionUpdateInfo = {
         transactionId,
         name: req.body.name,
         amount: Number(req.body.amount),
@@ -104,11 +104,11 @@ transactionsRouter.put(
       };
 
       if (req.file) {
-        transactioUpdateInfo.img = req.file.originalname;
+        transactionUpdateInfo.img = req.file.originalname;
       }
 
 
-      const updatedTransaction = await updateTransaction(transactioUpdateInfo, userId);
+      const updatedTransaction = await updateTransaction(transactionUpdateInfo, userId);
       // const updatedTransaction = await updateTransaction({
       //   ...userInfo,
       //   transactionId,

@@ -1,6 +1,7 @@
 const { TransactionsDAO } = require("../../db-access");
 
-async function updateTransaction({ transactionId, userId, ...newValue }) {
+async function updateTransaction({ transactionId, ...newValue }, userId) {
+
   const updatedTransaction = await TransactionsDAO.editTransaction(
     transactionId,
     userId,
