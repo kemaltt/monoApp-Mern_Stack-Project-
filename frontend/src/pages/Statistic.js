@@ -7,16 +7,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 // import TopMobileBar from "../components/TopMobileBar";
 
-const Statistic = ({ token }) => {
+const Statistic = () => {
 
-  const [getTransactions] = useGetTransactionsMutation();
+  const [getTransactions, { isLoading }] = useGetTransactionsMutation();
   const { transactions } = useSelector((state) => state.transactions);
 
   useEffect(() => {
-    if (token) getTransactions(token);
-  }, [token, getTransactions]);
+    getTransactions();
+  }, [getTransactions]);
 
   // Toplam işlemi için genel bir fonksiyon
   const sum = (accumulator, curr) => accumulator + curr;
@@ -95,61 +96,64 @@ const Statistic = ({ token }) => {
 
   // ________________________________________________________
 
-  const [sortStatistic, setSortStatistic] = useState(transactions);
+  const [sortStatistic, setSortStatistic] = useState([]);
   const [toggleTrans, setToggleTrans] = useState(true);
 
   const navigate = useNavigate();
   const asIncome = (amount, income) => (income ? amount : -amount);
 
-  const amountSortDesc = () => {
-    setSortStatistic([
-      ...[...transactions.transactions].sort(
-        (a, b) => asIncome(b.amount, b.income) - asIncome(a.amount, a.income)
-      ),
-    ]);
+  // İlk olarak transactions state'ini sortStatistic'e ayarlayın (useEffect ile)
+  useEffect(() => {
+    if (transactions?.transactions) {
+      setSortStatistic([...transactions.transactions]);
+    }
+  }, [transactions]);
+
+  // Genel bir sort fonksiyonu oluşturun
+  const sortBy = (key, ascending = true) => {
+    const sortedData = [...sortStatistic].sort((a, b) => {
+      if (key === "amount") {
+        // Gelir ve gider durumunu hesaba kat
+        return ascending
+          ? asIncome(a.amount, a.income) - asIncome(b.amount, b.income)
+          : asIncome(b.amount, b.income) - asIncome(a.amount, a.income);
+      }
+      if (key === "date") {
+        return ascending
+          ? new Date(a.createdAt) - new Date(b.createdAt)
+          : new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (key === "name") {
+        return ascending
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      }
+      return 0;
+    });
+
+    setSortStatistic(sortedData);
   };
 
-
-  const amountSortAsc = () => {
-    setSortStatistic([
-      ...transactions.transactions.sort(
-        (a, b) => asIncome(a.amount, a.income) - asIncome(b.amount, b.income)
-      ),
-    ]);
-  };
-
+  // Gelir/Gider toggle işlemi
   const handleToggleAmount = () => {
     setToggleTrans(!toggleTrans);
-    toggleTrans ? amountSortDesc() : amountSortAsc();
+    sortBy("amount", toggleTrans);
   };
 
-  const nameSortDesc = () => {
-    setSortStatistic([
-      ...sortStatistic.sort((a, b) => a.name.localeCompare(b.name)),
-    ]);
-  };
-  
-
-  const dateSortDesc = () => {
-    setSortStatistic([
-      ...transactions.transactions.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      ),
-    ]);
-  };
-
-
+  // Select değişikliklerini ele alma
   const handleSelect = (e) => {
     e.preventDefault();
+    const value = e.target.value;
 
-    if (e.target.value === "Name") {
-      nameSortDesc();
-    } else if (e.target.value === "Date") {
-      dateSortDesc();
-    } else if (e.target.value === "Amount") {
-      amountSortDesc();
+    if (value === "Name") {
+      sortBy("name", true);
+    } else if (value === "Date") {
+      sortBy("date", false);
+    } else if (value === "Amount") {
+      sortBy("amount", true);
     }
   };
+
 
   return (
     transactions && (
@@ -160,14 +164,16 @@ const Statistic = ({ token }) => {
             <div className="img">
               <img onClick={() => navigate(-1)} src={left} alt="left" />
             </div>
-
             <h4>Statistics</h4>
           </div>
           <div className="chart_data">
             <BarChart chartData={dataWeek} />
           </div>
 
-          <div className="transaction_header">
+          {isLoading 
+          ? <Loading />
+          : <>
+             <div className="transaction_header">
             <h6>Top Spending</h6>
             <div style={{ display: "flex", gap: "5px" }}>
               <form action="">
@@ -194,7 +200,7 @@ const Statistic = ({ token }) => {
           <div className="transactionsHistory">
             <div>
               {transactions?.transactions?.map((ele, index) => (
-                <Link key={index} to={`/detail/${ele._id}`}>
+                <Link key={index} to={`/transaction/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"
                     key={index}
@@ -240,6 +246,13 @@ const Statistic = ({ token }) => {
               ))}
             </div>
           </div>
+          </>
+          }
+         
+
+       
+
+
         </div>
         <Nav />
       </>

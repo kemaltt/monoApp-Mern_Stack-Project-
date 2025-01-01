@@ -6,7 +6,7 @@ import { useLoginMutation } from "../redux/auth/auth-api";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-const Login = ({ saveToken, onReply }) => {
+const Login = ({ saveToken }) => {
   const {
     register,
     handleSubmit,
@@ -22,7 +22,6 @@ const Login = ({ saveToken, onReply }) => {
       setErrorMessage(response.error.data.message); // Display error message
     } else {
       saveToken(response.data.accessToken);
-      onReply();
       setTimeout(() => {
         navigate("/home");
       }, 500);

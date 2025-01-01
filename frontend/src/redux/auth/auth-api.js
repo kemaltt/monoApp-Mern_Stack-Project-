@@ -5,7 +5,17 @@ import { apiBaseUrl } from '../../api/api'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: apiBaseUrl }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: apiBaseUrl,
+    prepareHeaders: (headers) => {
+      // localStorage'dan token'i al
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('token', `JWT ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({

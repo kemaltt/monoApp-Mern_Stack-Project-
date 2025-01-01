@@ -9,7 +9,7 @@ import TopMobileBar from "../components/TopMobileBar";
 import { useAppContext } from "../context/AppContext";
 import { useAddToTransactionMutation} from "../redux/transaction/transaction-api";
 
-const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
+const Add = () => {
   const { token } = useAppContext();
   const [addToTransaction] = useAddToTransactionMutation()
   // const [getTransactions] = useGetTransactionsMutation();
@@ -48,23 +48,6 @@ const Add = ({ setWalletInfo, updateTransaction, onReply }) => {
 
       await addToTransaction({ formData, token }).unwrap()
       navigate("/home");
-
-
-
-
-      // fetch(`${apiBaseUrl}/transaction/add`, {
-      //   method: "POST",
-      //   headers: { token: "JWT " + token },
-      //   body: formData,
-      // })
-      //   .then((response) => response.json())
-      //   .then(
-      //     (addedTransaction) =>
-      //       setWalletInfo((previous) => [...previous, addedTransaction]),
-      //     onReply()
-      //   );
-
-      // navigate("/home");
     }
   }
 

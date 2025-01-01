@@ -13,7 +13,7 @@ import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation, useUpd
 
 
 
-const EditExpense = ({ token, onReply }) => {
+const EditExpense = () => {
 
   const { id } = useParams();
 
@@ -30,7 +30,7 @@ const EditExpense = ({ token, onReply }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getTransactionById({ id, token }).unwrap();
+        const response = await getTransactionById(id).unwrap();
         if (response) {
           setName(response.name || "");
           setAmount(response.amount || "");
@@ -47,10 +47,10 @@ const EditExpense = ({ token, onReply }) => {
     };
 
     fetchData();
-  }, [id, token, getTransactionById]);
+  }, [id, getTransactionById]);
 
   const deleteTransaction = async () => {
-    await deleteFromTransaction({ id, token }).unwrap()
+    await deleteFromTransaction(id).unwrap()
     navigate("/home");
   };
 
@@ -66,7 +66,7 @@ const EditExpense = ({ token, onReply }) => {
       formData.append("img", img, img.name);
     }
 
-    await updateTransactionById({ id, token, formData }).unwrap()
+    await updateTransactionById({ id, formData }).unwrap()
     navigate("/home");
   };
 
@@ -139,7 +139,7 @@ const EditExpense = ({ token, onReply }) => {
               <IoReceiptSharp size={24} /> Edit Receipt
             </label>
 
-            <button onClick={editTransaction}>Edit Transaction</button>
+            <button onClick={editTransaction}>Save</button>
           </div>
         </motion.form>
       </div>

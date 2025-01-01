@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
 import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation, useUpdateTransactionByIdMutation } from "../redux/transaction/transaction-api";
 
-const EditIncome = ({ token }) => {
+const EditIncome = () => {
   const { id } = useParams();
   const [deleteFromTransaction] = useDeleteFromTransactionMutation()
   const [getTransactionById] = useGetTransactionByIdMutation()
@@ -25,7 +25,7 @@ const EditIncome = ({ token }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getTransactionById({ id, token }).unwrap();
+        const response = await getTransactionById(id).unwrap();
         if (response) {
           setName(response.name || "");
           setAmount(response.amount || "");
@@ -42,13 +42,13 @@ const EditIncome = ({ token }) => {
     };
 
     fetchData();
-  }, [id, token, getTransactionById]);
+  }, [id, getTransactionById]);
 
   const deleteTransaction = async () => {
-    await deleteFromTransaction({ id, token }).unwrap()
+    await deleteFromTransaction(id).unwrap()
     navigate("/home");
   };
-  const editTransaction =async (e) => {
+  const editTransaction = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -60,7 +60,7 @@ const EditIncome = ({ token }) => {
       formData.append("img", img, img.name);
     }
 
-    await updateTransactionById({ id, token, formData }).unwrap()
+    await updateTransactionById({ id,formData }).unwrap()
     navigate("/home");
   };
   return (
@@ -132,7 +132,7 @@ const EditIncome = ({ token }) => {
               <IoReceiptSharp size={24} /> Add Receipt
             </label>
 
-            <button onClick={editTransaction}>Edit Transaction</button>
+            <button onClick={editTransaction}>Save</button>
           </div>
         </motion.form>
       </div>

@@ -12,18 +12,17 @@ import { useSelector } from "react-redux";
 import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
 import { useEffect } from "react";
 
-const Profile = ({ token }) => {
+const Profile = () => {
   const navigate = useNavigate();
   const [getTransactions] = useGetTransactionsMutation();
   const { transactions } = useSelector((state) => state.transactions);
 
   useEffect(() => {
     const getAllTransactions = async () => {
-      if (token)
-        await getTransactions(token);
+        await getTransactions();
     }
     getAllTransactions();
-  }, [getTransactions, token]);
+  }, [getTransactions]);
   
   const logOut = () => {
     fetch(apiBaseUrl + "/logout", { credentials: "include" });

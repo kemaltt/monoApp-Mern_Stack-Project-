@@ -9,35 +9,35 @@ import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
 import { useSelector } from "react-redux";
 import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
+import Loading from "../components/Loading";
 
-const Wallet = ({token}) => {
+const Wallet = () => {
 
-  const [getTransactions] = useGetTransactionsMutation();
-  const {transactions}  = useSelector((state) => state.transactions);
+  const [getTransactions, { isLoading }] = useGetTransactionsMutation();
+  const { transactions } = useSelector((state) => state.transactions);
 
   useEffect(() => {
     const getAllTransactions = async () => {
-      if (token)
-        await getTransactions(token);
+      await getTransactions();
     }
     getAllTransactions();
-  }, [getTransactions, token]);
+  }, [getTransactions]);
 
   const income =
     transactions && Array.isArray(transactions.transactions)
       ? transactions.transactions
-          .filter((t) => t.income === true)
-          .map((t) => t.amount)
-          .reduce((sum, amount) => sum + amount, 0)
+        .filter((t) => t.income === true)
+        .map((t) => t.amount)
+        .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
   // console.log(income);
   const expenses =
     transactions && Array.isArray(transactions.transactions)
       ? transactions.transactions
-          .filter((f) => f.income === false)
-          .map((f) => f.amount)
-          .reduce((sum, amount) => sum + amount, 0)
+        .filter((f) => f.income === false)
+        .map((f) => f.amount)
+        .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
   const totalBalance = (income - expenses).toFixed(2);
@@ -95,60 +95,63 @@ const Wallet = ({token}) => {
           <div className="transaction_header">
             <h6>Transactions History</h6>
           </div>
-          <div className="transactionsHistory">
-            <div>
-              {transactions &&
-                Array.isArray(transactions.transactions) &&
-                transactions.transactions.map((ele, index) => (
-                  <Link key={index} to={`/detail/${ele._id}`}>
-                    <motion.div
-                      className="transaction_item"
-                      key={index}
-                      initial={{ y: "100vh" }}
-                      animate={{
-                        opacity: [0, 0.5, 1],
-                        y: [100, 0, 0],
-                      }}
-                      transition={{
-                        type: "twin",
-                        duration: 0.5,
-                        delay: (parseInt(index) + 0.5) / 10,
-                      }}
-                    >
-                      <div className="transaction_headline">
-                        <div className="transaction_icon">
-                          <h3> {ele.name && ele.name.charAt(0)}</h3>
-                        </div>
-                        <div className="transaction_name_date">
-                          <h5>{ele.name}</h5>
-                          <p>
-                            {new Date(ele.createdAt).toLocaleDateString(
-                              "de-DE",
-                              {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                              }
-                            )}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p
-                        className="transaction_amount"
-                        style={
-                          ele.income
-                            ? { color: "#25A969" }
-                            : { color: "#F95B51" }
-                        }
+          {isLoading
+            ? <Loading />
+            : <div className="transactionsHistory">
+              <div>
+                {transactions &&
+                  Array.isArray(transactions.transactions) &&
+                  transactions.transactions.map((ele, index) => (
+                    <Link key={index} to={`/transaction/detail/${ele._id}`}>
+                      <motion.div
+                        className="transaction_item"
+                        key={index}
+                        initial={{ y: "100vh" }}
+                        animate={{
+                          opacity: [0, 0.5, 1],
+                          y: [100, 0, 0],
+                        }}
+                        transition={{
+                          type: "twin",
+                          duration: 0.5,
+                          delay: (parseInt(index) + 0.5) / 10,
+                        }}
                       >
-                        {ele.income ? `+ $${ele.amount}` : `- $${ele.amount}`}
-                      </p>
-                    </motion.div>
-                  </Link>
-                ))}
+                        <div className="transaction_headline">
+                          <div className="transaction_icon">
+                            <h3> {ele.name && ele.name.charAt(0)}</h3>
+                          </div>
+                          <div className="transaction_name_date">
+                            <h5>{ele.name}</h5>
+                            <p>
+                              {new Date(ele.createdAt).toLocaleDateString(
+                                "de-DE",
+                                {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                }
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <p
+                          className="transaction_amount"
+                          style={
+                            ele.income
+                              ? { color: "#25A969" }
+                              : { color: "#F95B51" }
+                          }
+                        >
+                          {ele.income ? `+ $${ele.amount}` : `- $${ele.amount}`}
+                        </p>
+                      </motion.div>
+                    </Link>
+                  ))}
+              </div>
             </div>
-          </div>
+          }
+
         </motion.div>
       </div>
       <Nav />

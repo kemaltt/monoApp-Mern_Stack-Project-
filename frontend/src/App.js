@@ -1,6 +1,5 @@
 import "./App.scss";
 import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
-import { useState } from "react";
 import Home from "./pages/Home";
 import Wallet from "./pages/Wallet";
 import Statistic from "./pages/Statistic";
@@ -18,33 +17,9 @@ import { useAppContext } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
-  // const [token, setToken] = useState("");
 
-  const [replyCounter, setReplyCounter] = useState(0); // used to repload feed
-  const onTransactionReply = () => setReplyCounter((prev) => prev + 1);
   const appctx = useAppContext();
   const { token, saveToken } = appctx;
-  const [walletInfo, setWalletInfo] = useState(null);
-  // const { trigger, updateTrigger } = useAppContext();
-  // console.log(trigger);
-  // useEffect(() => {
-  //   if (!token) {
-  //     return;
-  //   }
-
-  //   fetch(`${apiBaseUrl}/transactions`, {
-  //     method: "GET",
-  //     headers: {
-  //       token: "JWT " + token,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((walletResult) => {
-  //       setWalletInfo(walletResult);
-
-  //     });
-  // }, [token, replyCounter]);
-
 
   return (
     <div className="App">
@@ -58,15 +33,13 @@ function App() {
           <Route path="/splash" element={<Splashscreen />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login saveToken={saveToken} onReply={onTransactionReply} />} />
+          <Route path="/login" element={<Login saveToken={saveToken} />} />
 
           <Route
             path="/home"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <Home
-                  token={token}
-                />
+                <Home />
               </AuthRequired>
             }
           />
@@ -75,9 +48,7 @@ function App() {
             path="/wallet"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <Wallet
-                  token={token}
-                />
+                <Wallet />
               </AuthRequired>
             }
           />
@@ -86,9 +57,7 @@ function App() {
             path="/statistic"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <Statistic
-                  token={token}
-                />
+                <Statistic />
               </AuthRequired>
             }
           />
@@ -97,10 +66,7 @@ function App() {
             path="/transaction/detail/:id"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <TransactionsDetails
-                  walletInfo={walletInfo}
-                  token={token}
-                />
+                <TransactionsDetails />
               </AuthRequired>
             }
           />
@@ -109,9 +75,7 @@ function App() {
             path="/profile"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <Profile
-                  token={token}
-                />
+                <Profile />
               </AuthRequired>
             }
           />
@@ -120,10 +84,7 @@ function App() {
             path="/add"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <Add
-                  onReply={onTransactionReply}
-                  walletInfo={walletInfo}
-                />
+                <Add />
               </AuthRequired>
             }
           />
@@ -132,10 +93,7 @@ function App() {
             path="/editExpense/:id"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <EditExpense
-                  onReply={onTransactionReply}
-                  token={token}
-                />
+                <EditExpense />
               </AuthRequired>
             }
           />
@@ -143,10 +101,7 @@ function App() {
             path="/editIncome/:id"
             element={
               <AuthRequired token={token} setToken={saveToken}>
-                <EditIncome
-                  onReply={onTransactionReply}
-                  token={token}
-                />
+                <EditIncome />
               </AuthRequired>
             }
           />

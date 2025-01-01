@@ -10,26 +10,14 @@ import TopMobileBar from "../components/TopMobileBar";
 import { useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
 import { useEffect } from "react";
 
-const TransactionsDetails = ({ token }) => {
+const TransactionsDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  // const { data: detailTransaction, isLoading } = useGetTransactionByIdQuery({ id, token });
   const [getTransactionById, { data: detailTransaction, isLoading }] = useGetTransactionByIdMutation()
 
   useEffect(() => {
-    getTransactionById({ id, token })
-  }, [getTransactionById, id, token]);
-  // useEffect(() => {
-  //   fetch(`${apiBaseUrl}/transaction/${id}`, {
-  //     headers: {
-  //       token: "JWT " + token,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((detailObj) => setDetailTransaction(detailObj))
-  //     .catch((err) => console.log(err));
-  // }, [token, id]);
-
+    getTransactionById(id)
+  }, [getTransactionById, id]);
 
   return (
     detailTransaction && (
