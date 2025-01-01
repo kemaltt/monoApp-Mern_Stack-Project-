@@ -8,19 +8,20 @@ import Nav from "../components/Nav";
 import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
+import { useSelector } from "react-redux";
 
-const Profile = ({ walletInfo }) => {
+const Profile = () => {
   const navigate = useNavigate();
-
+  const {transactions}  = useSelector((state) => state.transactions);
   const logOut = () => {
-    fetch(apiBaseUrl + "/users/logout", { credentials: "include" });
+    fetch(apiBaseUrl + "/logout", { credentials: "include" });
 
     localStorage.removeItem('token');
     navigate("/onboarding");
   };
 
   return (
-    walletInfo && (
+    transactions && (
       <div>
         <div className="profile">
           <div className="topBlueContainer">
@@ -41,16 +42,16 @@ const Profile = ({ walletInfo }) => {
           >
             <img
               src={
-                walletInfo.userImg?.startsWith("http")
-                  ? walletInfo.userImg
-                  : `${apiBaseUrl}/${walletInfo.userImg}`
+                transactions.userImg?.startsWith("http")
+                  ? transactions.userImg
+                  : `${apiBaseUrl}/${transactions.userImg}`
               }
-              alt={walletInfo.userImg}
+              alt={transactions.userImg}
               className="profilePicture"
             />
           </motion.div>
-          <h2 className="name">{walletInfo.name}</h2>
-          <p className="username">{walletInfo.email}</p>
+          <h2 className="name">{transactions.name}</h2>
+          <p className="username">{transactions.email}</p>
           <div className="profileContent">
             <p>
               {" "}

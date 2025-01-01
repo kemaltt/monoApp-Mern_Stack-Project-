@@ -5,18 +5,17 @@ import left from "../img/chevron-left.png";
 import Delete from "../components/Icons/Delete";
 import Nav from "../components/Nav";
 import "../scss/EditIncome.scss";
-import { apiBaseUrl } from "../api/api";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
-import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation } from "../redux/transaction/transaction-api";
-// import { useAppContext } from "../context/AppContext";
+import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation, useUpdateTransactionByIdMutation } from "../redux/transaction/transaction-api";
 
-const EditIncome = ({ token, onReply }) => {
-  // const { updateTrigger } = useAppContext();
+const EditIncome = ({ token }) => {
   const { id } = useParams();
-    const [deleteFromTransaction] = useDeleteFromTransactionMutation()
-    const [getTransactionById] = useGetTransactionByIdMutation()
+  const [deleteFromTransaction] = useDeleteFromTransactionMutation()
+  const [getTransactionById] = useGetTransactionByIdMutation()
+  const [updateTransactionById] = useUpdateTransactionByIdMutation()
+
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -49,7 +48,7 @@ const EditIncome = ({ token, onReply }) => {
     await deleteFromTransaction({ id, token }).unwrap()
     navigate("/home");
   };
-  const editTransaction = (e) => {
+  const editTransaction =async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -61,23 +60,8 @@ const EditIncome = ({ token, onReply }) => {
       formData.append("img", img, img.name);
     }
 
-    fetch(`${apiBaseUrl}/transaction/edit/${id}`, {
-      method: "PUT",
-      headers: {
-        token: "JWT " + token,
-      },
-
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((editedTransaction) => {
-
-        if (editedTransaction.acknowledged) {
-          onReply();
-          // updateTrigger();
-          navigate("/home");
-        }
-      });
+    await updateTransactionById({ id, token, formData }).unwrap()
+    navigate("/home");
   };
   return (
     <>
