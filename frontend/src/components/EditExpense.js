@@ -19,7 +19,7 @@ const EditExpense = () => {
 
   const [deleteFromTransaction] = useDeleteFromTransactionMutation()
   const [getTransactionById] = useGetTransactionByIdMutation()
-  const [updateTransactionById] = useUpdateTransactionByIdMutation()
+  const [updateTransactionById,{isLoading}] = useUpdateTransactionByIdMutation()
 
   const [name, setName] = useState();
   const [amount, setAmount] = useState();
@@ -139,7 +139,15 @@ const EditExpense = () => {
               <IoReceiptSharp size={24} /> Edit Receipt
             </label>
 
-            <button onClick={editTransaction}>Save</button>
+            <button onClick={editTransaction} disabled={isLoading} >Save
+            {isLoading && (
+            <span
+              className="spinner-border spinner-border-sm mx-1"
+              role="status"
+            ></span>
+          )}
+            </button>
+
           </div>
         </motion.form>
       </div>
