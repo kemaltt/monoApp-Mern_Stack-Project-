@@ -6,20 +6,34 @@ import ArrowUpIcon from "../components/Icons/ArrowUpIcon";
 import ArrowDownIcon from "../components/Icons/ArrowDownIcon";
 import Nav from "../components/Nav";
 import { motion } from "framer-motion";
+import { useGetTransactionsQuery } from "../redux/transaction/transaction-api";
 // import TopMobileBar from "../components/TopMobileBar";
 
-const Home = ({ walletInfo }) => {
+const Home = ({token}) => {
+
+  // const [getTransactions, { data }] = useGetTransactionsMutation()
+  // useGetTransactionsQuery(token);
+  const { data } = useGetTransactionsQuery(token);
+
+  // useEffect(() => {
+  //   const getAllTransactions = async () => {
+  //     if (token)
+  //     await getTransactions(token);
+  //   }
+  //   getAllTransactions();
+  // }, [getTransactions, token]);
+
   const income =
-    walletInfo && Array.isArray(walletInfo.transactions)
-      ? walletInfo.transactions
+    data?.transactions && Array.isArray(data?.transactions)
+      ? data?.transactions
         .filter((t) => t.income === true)
         .map((t) => t.amount)
         .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
   const expenses =
-    walletInfo && Array.isArray(walletInfo.transactions)
-      ? walletInfo.transactions
+    data?.transactions && Array.isArray(data?.transactions)
+      ? data?.transactions
         .filter((f) => f.income === false)
         .map((f) => f.amount)
         .reduce((sum, amount) => sum + amount, 0)
@@ -29,7 +43,7 @@ const Home = ({ walletInfo }) => {
   const totalBalance = income - expenses;
 
   return (
-    walletInfo && (
+    data?.transactions && (
       <>
         <motion.div className="home">
           {/* <TopMobileBar /> */}
@@ -83,8 +97,8 @@ const Home = ({ walletInfo }) => {
           </div>
           <div className="transactionsHistory">
             <div>
-              {walletInfo?.transactions?.map((ele, index) => (
-                <Link to={`/detail/${ele._id}`}>
+              {data.transactions?.map((ele, index) => (
+                <Link to={`/transaction/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"
                     key={index}

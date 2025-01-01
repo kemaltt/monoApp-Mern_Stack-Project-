@@ -20,6 +20,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
   // const [token, setToken] = useState("");
+
   const [replyCounter, setReplyCounter] = useState(0); // used to repload feed
   const onTransactionReply = () => setReplyCounter((prev) => prev + 1);
   const appctx = useAppContext();
@@ -32,7 +33,7 @@ function App() {
       return;
     }
 
-    fetch(`${apiBaseUrl}/users/showWallet`, {
+    fetch(`${apiBaseUrl}/transactions`, {
       method: "GET",
       headers: {
         token: "JWT " + token,
@@ -65,7 +66,7 @@ function App() {
             element={
               <AuthRequired token={token} setToken={saveToken}>
                 <Home
-                  walletInfo={walletInfo}
+                  token={token}
                 />
               </AuthRequired>
             }
@@ -95,7 +96,7 @@ function App() {
           />
 
           <Route
-            path="/detail/:id"
+            path="/transaction/detail/:id"
             element={
               <AuthRequired token={token} setToken={saveToken}>
                 <TransactionsDetails

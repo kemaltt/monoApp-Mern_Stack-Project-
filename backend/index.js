@@ -37,8 +37,8 @@ app.use(express.static("uploads/profile"));
 app.use(express.static("uploads/receipt"));
 app.use(express.json());
 
-app.use("/transactions", transactionsRouter);
-app.use("/users", userRouter);
+app.use(transactionsRouter);
+app.use(userRouter);
 
 
 // Routes

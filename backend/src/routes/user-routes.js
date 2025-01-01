@@ -107,7 +107,7 @@ userRouter.get("/logout", async (req, res) => {
   res.status(200).json({});
 });
 
-userRouter.get("/showWallet", doAuthMiddleware, async (req, res) => {
+userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
   try {
     const userId = req.userClaims.sub;
     const userWallet = await showWallet({ userId });

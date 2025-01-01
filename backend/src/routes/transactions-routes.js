@@ -60,7 +60,7 @@ transactionsRouter.post(
   }
 );
 
-transactionsRouter.get("/details/:id", doAuthMiddleware, (req, res) => {
+transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;
   const userId = req.userClaims.sub;
   showDetailTransaction({ transactionId, userId })
