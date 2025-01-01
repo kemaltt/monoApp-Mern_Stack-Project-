@@ -76,7 +76,7 @@ function App() {
             element={
               <AuthRequired token={token} setToken={saveToken}>
                 <Wallet
-                  walletInfo={walletInfo}
+                  token={token}
                 />
               </AuthRequired>
             }
@@ -87,7 +87,6 @@ function App() {
             element={
               <AuthRequired token={token} setToken={saveToken}>
                 <Statistic
-                  walletInfo={walletInfo}
                   token={token}
                 />
               </AuthRequired>
@@ -111,7 +110,7 @@ function App() {
             element={
               <AuthRequired token={token} setToken={saveToken}>
                 <Profile
-                  walletInfo={walletInfo}
+                  token={token}
                 />
               </AuthRequired>
             }

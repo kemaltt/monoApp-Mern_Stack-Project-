@@ -7,13 +7,12 @@ import ArrowDownIcon from "../components/Icons/ArrowDownIcon";
 import Nav from "../components/Nav";
 import { motion } from "framer-motion";
 import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
-// import TopMobileBar from "../components/TopMobileBar";
+import { useSelector } from "react-redux";
 
 const Home = ({ token }) => {
 
-  // const [getTransactions, { data }] = useGetTransactionsMutation()
-  // useGetTransactionsQuery(token);
-  const [getTransactions, { data }] = useGetTransactionsMutation();
+  const [getTransactions] = useGetTransactionsMutation();
+  const { transactions } = useSelector((state) => state.transactions);
 
   useEffect(() => {
     const getAllTransactions = async () => {
@@ -24,26 +23,25 @@ const Home = ({ token }) => {
   }, [getTransactions, token]);
 
   const income =
-    data?.transactions && Array.isArray(data?.transactions)
-      ? data?.transactions
+    transactions?.transactions && Array.isArray(transactions?.transactions)
+      ? transactions?.transactions
         .filter((t) => t.income === true)
         .map((t) => t.amount)
         .reduce((sum, amount) => sum + amount, 0)
       : 0;
 
   const expenses =
-    data?.transactions && Array.isArray(data?.transactions)
-      ? data?.transactions
+    transactions?.transactions && Array.isArray(transactions?.transactions)
+      ? transactions?.transactions
         .filter((f) => f.income === false)
         .map((f) => f.amount)
         .reduce((sum, amount) => sum + amount, 0)
       : 0;
-  // console.log(income);
-  // console.log(expenses);
+
   const totalBalance = income - expenses;
 
   return (
-    data?.transactions && (
+    transactions?.transactions && (
       <>
         <motion.div className="home">
           {/* <TopMobileBar /> */}
@@ -97,7 +95,7 @@ const Home = ({ token }) => {
           </div>
           <div className="transactionsHistory">
             <div>
-              {data.transactions?.map((ele, index) => (
+              {transactions.transactions?.map((ele, index) => (
                 <Link key={index} to={`/transaction/detail/${ele._id}`}>
                   <motion.div
                     className="transaction_item"

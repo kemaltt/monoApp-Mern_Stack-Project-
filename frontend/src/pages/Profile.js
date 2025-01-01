@@ -9,10 +9,22 @@ import { apiBaseUrl } from "../api/api";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
 import { useSelector } from "react-redux";
+import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
+import { useEffect } from "react";
 
-const Profile = () => {
+const Profile = ({ token }) => {
   const navigate = useNavigate();
-  const {transactions}  = useSelector((state) => state.transactions);
+  const [getTransactions] = useGetTransactionsMutation();
+  const { transactions } = useSelector((state) => state.transactions);
+
+  useEffect(() => {
+    const getAllTransactions = async () => {
+      if (token)
+        await getTransactions(token);
+    }
+    getAllTransactions();
+  }, [getTransactions, token]);
+  
   const logOut = () => {
     fetch(apiBaseUrl + "/logout", { credentials: "include" });
 

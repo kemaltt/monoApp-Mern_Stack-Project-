@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../scss/Wallet.scss";
 import Add from "../img/Add.png";
 import Pay from "../img/Pay.png";
@@ -7,11 +7,25 @@ import Nav from "../components/Nav";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
+import { useSelector } from "react-redux";
+import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
 
-const Wallet = ({ walletInfo }) => {
+const Wallet = ({token}) => {
+
+  const [getTransactions] = useGetTransactionsMutation();
+  const {transactions}  = useSelector((state) => state.transactions);
+
+  useEffect(() => {
+    const getAllTransactions = async () => {
+      if (token)
+        await getTransactions(token);
+    }
+    getAllTransactions();
+  }, [getTransactions, token]);
+
   const income =
-    walletInfo && Array.isArray(walletInfo.transactions)
-      ? walletInfo.transactions
+    transactions && Array.isArray(transactions.transactions)
+      ? transactions.transactions
           .filter((t) => t.income === true)
           .map((t) => t.amount)
           .reduce((sum, amount) => sum + amount, 0)
@@ -19,8 +33,8 @@ const Wallet = ({ walletInfo }) => {
 
   // console.log(income);
   const expenses =
-    walletInfo && Array.isArray(walletInfo.transactions)
-      ? walletInfo.transactions
+    transactions && Array.isArray(transactions.transactions)
+      ? transactions.transactions
           .filter((f) => f.income === false)
           .map((f) => f.amount)
           .reduce((sum, amount) => sum + amount, 0)
@@ -48,7 +62,7 @@ const Wallet = ({ walletInfo }) => {
         >
           <section>
             <p>Total Balance</p>
-            <h2>${walletInfo && totalBalance}</h2>
+            <h2>${transactions && totalBalance}</h2>
           </section>
           <div className="addPaySendGroup">
             <div className="addGroup">
@@ -83,10 +97,10 @@ const Wallet = ({ walletInfo }) => {
           </div>
           <div className="transactionsHistory">
             <div>
-              {walletInfo &&
-                Array.isArray(walletInfo.transactions) &&
-                walletInfo.transactions.map((ele, index) => (
-                  <Link to={`/detail/${ele._id}`}>
+              {transactions &&
+                Array.isArray(transactions.transactions) &&
+                transactions.transactions.map((ele, index) => (
+                  <Link key={index} to={`/detail/${ele._id}`}>
                     <motion.div
                       className="transaction_item"
                       key={index}
