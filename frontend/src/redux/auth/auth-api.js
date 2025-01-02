@@ -52,12 +52,9 @@ export const authApi = createApi({
       })
     }),
     logout: builder.mutation({
-      query: (token) => ({
+      query: () => ({
         url: '/logout',
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
     }),
     uploadProfileImage: builder.mutation({

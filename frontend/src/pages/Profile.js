@@ -11,10 +11,12 @@ import TopMobileBar from "../components/TopMobileBar";
 import { useSelector } from "react-redux";
 import { useGetTransactionsMutation } from "../redux/transaction/transaction-api";
 import { useEffect } from "react";
+import { useLogoutMutation } from "../redux/auth/auth-api";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [getTransactions] = useGetTransactionsMutation();
+  const [logout] = useLogoutMutation();
   const { transactions } = useSelector((state) => state.transactions);
 
   useEffect(() => {
@@ -24,8 +26,8 @@ const Profile = () => {
     getAllTransactions();
   }, [getTransactions]);
   
-  const logOut = () => {
-    fetch(apiBaseUrl + "/logout", { credentials: "include" });
+  const logOut = async () => {
+    await logout().unwrap();
 
     localStorage.removeItem('token');
     navigate("/onboarding");

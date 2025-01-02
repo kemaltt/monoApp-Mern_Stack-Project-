@@ -104,7 +104,7 @@ userRouter.post("/login", async (req, res) => {
 });
 userRouter.get("/logout", async (req, res) => {
   req.session.refreshToken = null;
-  res.status(200).json({});
+  res.status(200).json({message: 'Logged out successfully.'});
 });
 
 userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
