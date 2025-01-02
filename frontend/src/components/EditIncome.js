@@ -14,7 +14,7 @@ const EditIncome = () => {
   const { id } = useParams();
   const [deleteFromTransaction] = useDeleteFromTransactionMutation()
   const [getTransactionById] = useGetTransactionByIdMutation()
-  const [updateTransactionById] = useUpdateTransactionByIdMutation()
+  const [updateTransactionById, { isLoading }] = useUpdateTransactionByIdMutation()
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -60,7 +60,7 @@ const EditIncome = () => {
       formData.append("img", img, img.name);
     }
 
-    await updateTransactionById({ id,formData }).unwrap()
+    await updateTransactionById({ id, formData }).unwrap()
     navigate("/home");
   };
   return (
@@ -132,7 +132,14 @@ const EditIncome = () => {
               <IoReceiptSharp size={24} /> Add Receipt
             </label>
 
-            <button onClick={editTransaction}>Save</button>
+            <button onClick={editTransaction} disabled={isLoading} >Save
+              {isLoading && (
+                <span
+                  className="spinner-border spinner-border-sm mx-1"
+                  role="status"
+                ></span>
+              )}
+            </button>
           </div>
         </motion.form>
       </div>

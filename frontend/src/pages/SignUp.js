@@ -1,24 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { apiBaseUrl } from "../api/api";
 import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useRegisterMutation } from "../redux/auth/auth-api";
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [userImg, setUserImg] = useState(null);
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+  const [registerMutation, { isLoading }] = useRegisterMutation();
   const [previewImg, setPreviewImg] = useState(null);
-  const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setUserImg(file);
+      setValue("userImg", file); // React Hook Form'un "setValue" fonksiyonu ile image state'i güncelleyebiliriz.
 
       // Create an image preview
       const reader = new FileReader();
@@ -30,46 +27,27 @@ const SignUp = () => {
   };
 
   const removeImage = () => {
-    setUserImg(null);
+    setValue("userImg", null);
     setPreviewImg(null);
   };
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    if (userImg) {
-      formData.append("userImg", userImg, userImg.name);
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    if (data.userImg) {
+      formData.append("userImg", data.userImg, data.userImg.name);
     }
 
-    setIsLoading(true);
-    try {
-      const response = await axios({
-        method: "post",
-        url: `${apiBaseUrl}/users/register`,
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 200) {
-        setIsLoading(false);
-        setMessage(<p className="text-success">Account created successfully</p>);
-        setTimeout(() => {
-          setName("");
-          setEmail("");
-          setPassword("");
-          removeImage();
-          navigate("/login");
-        }, 3000);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      const errorMsg = error.response?.data?.err || error.response?.message || "An error occurred";
-      setMessage(<p className="text-danger">{errorMsg}</p>);
+    const response = await registerMutation(formData);
+    if (response.error) {
+      setErrorMessage(response.error.data.message); // Display error message
+    } else {
+      setErrorMessage(<p className="text-success">Account created successfully</p>);
+      setTimeout(() => {
+        navigate("/login");
+      }, 500);
     }
   };
 
@@ -86,40 +64,44 @@ const SignUp = () => {
           ease: "easeInOut",
         }}
         whileHover={{ scale: 1.01 }}
+        onSubmit={handleSubmit(onSubmit)} // RHF'nin handleSubmit fonksiyonunu buraya bağlıyoruz.
       >
         <div className="formContent">
           <label htmlFor="name">NAME</label>
           <input
             type="text"
-            name="name"
-            id="name"
+            {...register("name", { required: "Name is required" })}
             placeholder="Full Name"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
           />
+          {errors.name && <span className="text-danger">{errors.name.message}</span>}
 
           <label htmlFor="email">EMAIL</label>
           <input
             type="email"
-            name="email"
-            id="email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: "Invalid email address",
+              },
+            })}
             placeholder="Email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
+          {errors.email && <span className="text-danger">{errors.email.message}</span>}
 
           <label htmlFor="password">PASSWORD</label>
           <input
             type="password"
-            name="password"
-            id="password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
             placeholder="Password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
           />
+          {errors.password && <span className="text-danger">{errors.password.message}</span>}
 
           <label htmlFor="picture">PROFILE PICTURE</label>
           {previewImg ? (
@@ -129,23 +111,33 @@ const SignUp = () => {
             </div>
           ) : (
             <label className="custom-file-upload">
-              <input type="file" accept="image/*" onChange={handleImageChange} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
               <BiImageAdd size={24} /> Add Profile Photo
             </label>
           )}
 
-          <button onClick={handleSignUp} disabled={isLoading}>
+          <button type="submit" disabled={isLoading}>
             Register
             {isLoading && (
               <span className="spinner-border spinner-border-sm mx-1" role="status"></span>
             )}
           </button>
         </div>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {errorMessage}
+          </div>
+        )}
       </motion.form>
       <p>
         Already Have An Account? <Link to="/login">Log In</Link>
       </p>
-      {message && <div>{message}</div>}
     </div>
   );
 };

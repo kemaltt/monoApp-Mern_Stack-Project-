@@ -70,7 +70,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
   } catch (error) {
 
     res.status(500).json({
-      err: error.message || "Unknown error while registering new user.",
+      message: error.message || "Unknown error while registering new user.",
     });
   }
 });
