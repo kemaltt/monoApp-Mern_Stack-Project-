@@ -9,7 +9,7 @@ const uploadToFirebase = async (file, fileType, id, userId) => {
     const folderPath =
       fileType === "receipt"
         ? `private/receipts/${id}`
-        : fileType === "profile_image"
+        : fileType === "userImg"
           ? `private/users/${userId}/profile`
           : `other`;
 
