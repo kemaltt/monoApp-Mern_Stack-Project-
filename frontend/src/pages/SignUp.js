@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "../redux/auth/auth-api";
 
 const SignUp = () => {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const [registerMutation, { isLoading }] = useRegisterMutation();
   const [previewImg, setPreviewImg] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");

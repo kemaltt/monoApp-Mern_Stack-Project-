@@ -6,11 +6,9 @@ import Nav from "../components/Nav";
 import { IoReceiptSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
-import { useAppContext } from "../context/AppContext";
 import { useAddToTransactionMutation} from "../redux/transaction/transaction-api";
 
 const Add = () => {
-  const { token } = useAppContext();
   const [addToTransaction] = useAddToTransactionMutation()
   // const [getTransactions] = useGetTransactionsMutation();
 
@@ -46,7 +44,7 @@ const Add = () => {
         : formData.append("income", false);
 
 
-      await addToTransaction({ formData, token }).unwrap()
+      await addToTransaction(formData).unwrap()
       navigate("/home");
     }
   }

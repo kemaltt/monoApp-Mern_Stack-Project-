@@ -27,14 +27,10 @@ const EditIncome = () => {
       try {
         const response = await getTransactionById(id).unwrap();
         if (response) {
-          setName(response.name || "");
-          setAmount(response.amount || "");
-          setCreatedAt(
-            response.createdAt
-              ? new Date(response.createdAt).toISOString().substring(0, 16)
-              : ""
-          );
-          setReceipt(response.img || null);
+          setName(response.name);
+          setAmount(response.amount);
+          setCreatedAt(new Date(response.createdAt).toISOString().substring(0, 16));
+          setReceipt(response.img);
         }
       } catch (error) {
         console.error("Error fetching transaction data:", error);

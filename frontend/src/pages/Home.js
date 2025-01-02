@@ -64,7 +64,7 @@ const Home = () => {
             <img src={threeDots} alt="three dots" />
           </div>
           <div className="topBlueContainerContent">
-            <h2>$ {totalBalance.toFixed(2)}</h2>
+            <h2>$ {totalBalance?.toFixed(2)}</h2>
             <div className="income_expenses_container">
               <div className="income">
                 <h4>
@@ -73,7 +73,7 @@ const Home = () => {
                   </span>
                   Income
                 </h4>
-                <p>$ {income.toFixed(2)}</p>
+                <p>$ {income?.toFixed(2)}</p>
               </div>
               <div className="expenses">
                 <h4>
@@ -83,7 +83,7 @@ const Home = () => {
                   Expenses
                 </h4>
 
-                <p>$ {expenses.toFixed(2)}</p>
+                <p>$ {expenses?.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -147,8 +147,8 @@ const Home = () => {
                         }
                       >
                         {ele.income && ele.income
-                          ? `+ $${ele.amount.toFixed(2)}`
-                          : `- $${ele.amount.toFixed(2)}`}
+                          ? `+ $${ele.amount?.toFixed(2)}`
+                          : `- $${ele.amount?.toFixed(2)}`}
                       </p>
                     </motion.div>
                   </Link>
