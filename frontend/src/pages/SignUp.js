@@ -70,7 +70,13 @@ const SignUp = () => {
           <label htmlFor="name">NAME</label>
           <input
             type="text"
-            {...register("name", { required: "Name is required" })}
+            {...register("name", 
+              { required: "Name is required" ,
+                pattern: {
+                  value: /^(?=)(?=).{2,15}$/,
+                  message: "Invalid name",
+                },
+              })}
             placeholder="Full Name"
           />
           {errors.name && <span className="text-danger">{errors.name.message}</span>}
@@ -95,7 +101,7 @@ const SignUp = () => {
             {...register("password", {
               required: "Password is required",
               minLength: {
-                value: 8,
+                value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
                 message: "Password must be at least 8 characters",
               },
             })}
