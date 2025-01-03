@@ -1,25 +1,30 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import left from "../img/chevron-left.png";
 import Delete from "../components/Icons/Delete";
 import Nav from "../components/Nav";
 import "../scss/EditIncome.scss";
-import { IoReceiptSharp } from "react-icons/io5";
+import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
-import { useDeleteFromTransactionMutation, useGetTransactionByIdMutation, useUpdateTransactionByIdMutation } from "../redux/transaction/transaction-api";
+import {
+  useDeleteFromTransactionMutation,
+  useGetTransactionByIdMutation,
+  useUpdateTransactionByIdMutation,
+} from "../redux/transaction/transaction-api";
+import { apiBaseUrl } from "../api/api";
 
 const EditIncome = () => {
   const { id } = useParams();
-  const [deleteFromTransaction] = useDeleteFromTransactionMutation()
-  const [getTransactionById] = useGetTransactionByIdMutation()
-  const [updateTransactionById, { isLoading }] = useUpdateTransactionByIdMutation()
+  const [deleteFromTransaction] = useDeleteFromTransactionMutation();
+  const [getTransactionById] = useGetTransactionByIdMutation();
+  const [updateTransactionById, { isLoading }] = useUpdateTransactionByIdMutation();
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [createdAt, setCreatedAt] = useState("");
-  const [img, setReceipt] = useState();
+  const [img, setReceipt] = useState(null);
+  const [previewImg, setPreviewImg] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +35,13 @@ const EditIncome = () => {
           setName(response.name);
           setAmount(response.amount);
           setCreatedAt(new Date(response.createdAt).toISOString().substring(0, 16));
-          setReceipt(response.img);
+          if (response.img) {
+            setPreviewImg(
+              response.img.url.startsWith("http")
+                ? response.img.url
+                : `${apiBaseUrl}/${response.img.url}`
+            );
+          }
         }
       } catch (error) {
         console.error("Error fetching transaction data:", error);
@@ -41,9 +52,29 @@ const EditIncome = () => {
   }, [id, getTransactionById]);
 
   const deleteTransaction = async () => {
-    await deleteFromTransaction(id).unwrap()
+    await deleteFromTransaction(id).unwrap();
     navigate("/home");
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setReceipt(file);
+
+      // Create an image preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImg(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setReceipt(null);
+    setPreviewImg(null);
+  };
+
   const editTransaction = async (e) => {
     e.preventDefault();
 
@@ -56,9 +87,10 @@ const EditIncome = () => {
       formData.append("img", img, img.name);
     }
 
-    await updateTransactionById({ id, formData }).unwrap()
+    await updateTransactionById({ id, formData }).unwrap();
     navigate("/home");
   };
+
   return (
     <>
       <div className="edit_income">
@@ -84,7 +116,8 @@ const EditIncome = () => {
             stiffness: 200,
             ease: "easeInOut",
           }}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.01 }}
+          onSubmit={editTransaction}
         >
           <div className="formContent">
             <label htmlFor="amount">Name</label>
@@ -118,17 +151,26 @@ const EditIncome = () => {
               value={createdAt}
               onChange={(e) => setCreatedAt(e.target.value)}
             />
+
             <label htmlFor="receipt">RECEIPT</label>
+            {previewImg ? (
+              <div className="image-preview">
+                <img src={previewImg} alt="Uploaded receipt" className="img-fluid" />
+                <BiXCircle className="remove-icon" size={24} onClick={removeImage} />
+              </div>
+            ) : (
+              <label className="custom-file-upload">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                <BiImageAdd size={24} /> Add Receipt
+              </label>
+            )}
 
-            <label className="custom-file-upload">
-              <input
-                type="file"
-                onChange={(e) => setReceipt(e.target.files[0])}
-              />
-              <IoReceiptSharp size={24} /> Add Receipt
-            </label>
-
-            <button onClick={editTransaction} disabled={isLoading} >Save
+            <button type="submit" disabled={isLoading}>
+              Save
               {isLoading && (
                 <span
                   className="spinner-border spinner-border-sm mx-1"

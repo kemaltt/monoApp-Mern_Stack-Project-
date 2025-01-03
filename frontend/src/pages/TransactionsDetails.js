@@ -102,9 +102,9 @@ const TransactionsDetails = () => {
                     {detailTransaction.img ? (
                       <img
                         src={
-                          detailTransaction.img?.startsWith("http")
-                            ? detailTransaction.img
-                            : `${apiBaseUrl}/${detailTransaction.img}`
+                          detailTransaction.img?.url.startsWith("http")
+                            ? detailTransaction.img.url
+                            : `${apiBaseUrl}/${detailTransaction.img.url}`
                         }
                         // alt={detailTransaction.img}
                         alt="upload receipt"

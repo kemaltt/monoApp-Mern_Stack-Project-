@@ -7,8 +7,8 @@ const { fireBaseStorage } = require("../config/FireBase");
 const uploadToFirebase = async (file, fileType, id, userId) => {
   try {
     const folderPath =
-      fileType === "receipt"
-        ? `private/receipts/${id}`
+      fileType === "img"
+        ? `private/users/${userId}/receipts/${id}`
         : fileType === "userImg"
           ? `private/users/${userId}/profile`
           : `other`;

@@ -45,26 +45,26 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
   try {
     const userInfo = req.body;
     // Token'dan kullanıcı ID'sini al
-    // const authHeader = req.headers["authorization"];
-    // const token = authHeader && authHeader.split(" ")[1];
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // const userId = decoded?.id;
-    const userId = 12345;
+    const authHeader = req.headers["token"];
+    const token = authHeader && authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded?.id;
+console.log('userId', userId);
 
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    if (req.file) {
-      const file = req.file; // req.file'deki dosyayı değişkene ata
-      const uploadedFile = await uploadToFirebase(file, "userImg", null, userId);
-      console.log('file uploaded', uploadedFile);
+    // if (!userId) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
+    // if (req.file) {
+    //   const file = req.file; // req.file'deki dosyayı değişkene ata
+    //   const uploadedFile = await uploadToFirebase(file, "userImg", null, userId);
+    //   console.log('file uploaded', uploadedFile);
       
-      const user = await registerUser({ ...userInfo, userImg: uploadedFile });
-      res.json(user);
-    } else {
-      const user = await registerUser({ ...userInfo });
-      res.json(user);
-    }
+    //   const user = await registerUser({ ...userInfo, userImg: uploadedFile });
+    //   res.json(user);
+    // } else {
+    //   const user = await registerUser({ ...userInfo });
+    //   res.json(user);
+    // }
     // const user = await registerUser({ ...userInfo, userImg });
     // res.json(user);
   } catch (error) {
