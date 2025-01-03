@@ -41,18 +41,14 @@ transactionsRouter.post(
   doAuthMiddleware,
   async (req, res) => {
     if (!req.body) {
-      res.status(200).json({ error: "Please include a new Income" });
-      return;
+      return res.status(400).json({ error: "Please include a new Income" }); // Hata için doğru HTTP kodu
     }
+
     const userId = req.userClaims.sub;
-
-    console.log('userId', userId);
-
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
 
     // Varsayılan olarak img alanını null yapıyoruz.
     let img = null;
@@ -60,33 +56,38 @@ transactionsRouter.post(
       img = req.file.originalname;
     }
 
-    createNewTransaction({ userId, img, ...req.body })
-      .then((addedIncome) => res.status(201).json(addedIncome))
-      .catch((err) => {
-        console.log(err);
-        res
-          .status(500)
-          .json({ error: "Failed to add new income to database." });
-      });
+    try {
+      // Yeni transaction oluşturuluyor
+      const addedTransaction = await createNewTransaction({ userId, img, ...req.body });
 
-    if (req.file) {
-      const transactionId = addedIncome.id;
-      console.log('transactionId', transactionId);
+      // Eğer resim yüklendiyse Firebase'e yükle ve transaction'ı güncelle
+      if (req.file) {
+        const transactionId = addedTransaction.transactionId.toString();
 
-      const file = req.file; // req.file'deki dosyayı değişkene ata
-      const uploadedFile = await uploadToFirebase(file, "img", transactionId, userId);
-      console.log('file uploaded', uploadedFile);
+        // Dosyayı yükle
+        const uploadedFile = await uploadToFirebase(req.file, "img", transactionId, userId);
+        const { insertResult, updateResult, ...rest } = addedTransaction
+        // Transaction'ı güncelle
+        const updatedTransaction = await updateTransaction(
+          { ...rest, img: uploadedFile },
+          userId
+        );
 
-      updateTransaction({ ...addedIncome, img: uploadedFile }, userId)
-        .then((updatedTransaction) => res.json(updatedTransaction))
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json("Unknown error while editing a Transaction.");
-        });
+        // Güncellenmiş transaction döndür
+        return res.status(201).json(updatedTransaction);
+      }
+
+      // Eğer resim yoksa sadece transaction'ı döndür
+      return res.status(201).json(addedTransaction);
+    } catch (err) {
+      console.error("Error adding transaction:", err);
+
+      // Hata durumunda yanıt gönder
+      return res.status(500).json({ error: "Failed to add new income to database." });
     }
-
   }
 );
+
 
 transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
   const transactionId = req.params.id;

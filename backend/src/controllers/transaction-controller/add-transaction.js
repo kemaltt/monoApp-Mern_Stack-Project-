@@ -27,16 +27,28 @@ async function createNewTransaction({
   const user = makeUser(foundUser);
   const totalBalance = user.totalBalance;
 
+  // Transaction ekleniyor
   const insertResult = await TransactionsDAO.insertTransaction(transaction, userId);
+
+  // Eklenen transaction'ın ID'si alınıyor
+  const transactionId = insertResult.insertedId;
+
+  if (!transactionId) {
+    throw new Error("Transaction ID not found");
+  }
+
+  // Kullanıcının toplam bakiyesi güncelleniyor
   const newTotalBalance = income
     ? totalBalance + Number(amount)
     : totalBalance - Number(amount);
+
   const updateResult = await UserDAO.updateUserTotalBalance(
     userId,
     newTotalBalance
   );
 
-  return { insertResult, updateResult };
+  // Transaction ID'yi döndür
+  return { transactionId, insertResult, updateResult };
 }
 
 module.exports = { createNewTransaction };
