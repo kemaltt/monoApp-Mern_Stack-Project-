@@ -6,7 +6,7 @@ const { createNewTransaction } = require("../controllers/transaction-controller/
 const { showDetailTransaction } = require("../controllers/transaction-controller/show-transactions-detail");
 const { removeTransaction } = require("../controllers/transaction-controller/delete-transaction");
 const { updateTransaction } = require("../controllers/transaction-controller/edit-transaction");
-const { upload, uploadToFirebase } = require("../services/file-upload.service");
+const { upload, uploadToFirebase, deleteFromFirebase } = require("../services/file-upload.service");
 const doAuthMiddleware = makeDoAuthMiddleware("access");
 const transactionsRouter = express.Router();
 
@@ -100,18 +100,37 @@ transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
     });
 });
 
-transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, (req, res) => {
+// transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, (req, res) => {
+//   const transactionId = req.params.id;
+//   const userId = req.userClaims.sub;
+
+//   removeTransaction({ transactionId, userId })
+//     .then((removeTransaction) => res.json({ removeTransaction }))
+//     .catch((err) => {
+//       console.log(err);
+//       res
+//         .status(500)
+//         .json({ error: "Failed to remove transaction from database." });
+//     });
+// });
+transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, async (req, res) => {
   const transactionId = req.params.id;
   const userId = req.userClaims.sub;
 
-  removeTransaction({ transactionId, userId })
-    .then((removeTransaction) => res.json({ removeTransaction }))
-    .catch((err) => {
-      console.log(err);
-      res
-        .status(500)
-        .json({ error: "Failed to remove transaction from database." });
-    });
+  try {
+    // Transaction'u veritabanından sil
+    const removeTransactionResult = await removeTransaction({ transactionId, userId });    
+    // Transaction ile ilişkili resmi sil
+    if (removeTransactionResult.value.img.url) {
+      await deleteFromFirebase(removeTransactionResult.value.img.url);
+    }
+    res.json({ removeTransaction: removeTransactionResult });
+  } catch (err) {
+    console.error("Error deleting transaction or related image:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to remove transaction or related image." });
+  }
 });
 
 transactionsRouter.put(

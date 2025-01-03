@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { getDownloadURL, ref, uploadBytes } = require("firebase/storage");
+const { getDownloadURL, ref, uploadBytes, deleteObject } = require("firebase/storage");
 const { fireBaseStorage } = require("../config/FireBase");
 
 
@@ -39,6 +39,24 @@ const uploadToFirebase = async (file, fileType, id, userId) => {
   }
 };
 
+ const deleteFromFirebase = async (fileUrl) => {
+  try {
+    // URL'den dosya yolunu çıkar
+    const decodedPath = decodeURIComponent(fileUrl.split("/o/")[1].split("?")[0]);
+
+    // Firebase Storage referansı oluştur
+    const storageRef = ref(fireBaseStorage, decodedPath);
+
+    // Dosyayı sil
+    await deleteObject(storageRef);
+
+    console.log("File deleted successfully");
+  } catch (error) {
+    console.error("Error deleting from Firebase:", error);
+    throw error;
+  }
+};
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -49,6 +67,7 @@ const upload = multer({
 module.exports = {
   uploadToFirebase,
   upload,
+  deleteFromFirebase,
 };
 
 // const storage = multer.diskStorage({
