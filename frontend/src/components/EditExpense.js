@@ -37,9 +37,9 @@ const EditExpense = () => {
           setCreatedAt(new Date(response.createdAt).toISOString().substring(0, 16));
           if (response.img) {
             setPreviewImg(
-              response.img.startsWith("http")
-                ? response.img
-                : `${process.env.REACT_APP_API_URL}/${response.img}`
+              response.img.url.startsWith("http")
+                ? response.img.url
+                : `${process.env.REACT_APP_API_URL}/${response.img.url}`
             );
           }
         }

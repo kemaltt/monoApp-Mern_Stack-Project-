@@ -54,7 +54,8 @@ transactionsRouter.post(
     }
 
 
-    let img;
+    // Varsayılan olarak img alanını null yapıyoruz.
+    let img = null;
     if (req.file) {
       img = req.file.originalname;
     }
