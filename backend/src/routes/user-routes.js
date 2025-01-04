@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 // const multer = require("multer");
 // const { doAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
@@ -44,11 +45,11 @@ const uploadMiddleware = upload.single("userImg");
 userRouter.post("/register", uploadMiddleware, async (req, res) => {
   try {
     const userInfo = req.body;
-    // Token'dan kullanıcı ID'sini al
-    const authHeader = req.headers["token"];
-    const token = authHeader && authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded?.id;
+    // // Token'dan kullanıcı ID'sini al
+    // const authHeader = req.headers["token"];
+    // const token = authHeader && authHeader.split(" ")[1];
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = 12345;
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -64,8 +65,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
       const user = await registerUser({ ...userInfo });
       res.json(user);
     }
-    const user = await registerUser({ ...userInfo, userImg });
-    res.json(user);
+
   } catch (error) {
 
     res.status(500).json({
