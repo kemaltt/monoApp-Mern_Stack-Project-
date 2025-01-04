@@ -1,20 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { apiBaseUrl } from '../../api/api'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from '../../api/api'
 
 
 
 export const transactionApi = createApi({
   reducerPath: 'transactionApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiBaseUrl,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        headers.set('token', `JWT ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     getTransactions: builder.mutation({
       query: () => ({
@@ -62,7 +53,19 @@ export const transactionApi = createApi({
         // },
       }),
     }),
+
+
+    deleteImage: builder.mutation({
+      query: (fileUrl) => ({
+        url: '/delete-image',
+        method: 'DELETE',
+        body: { fileUrl },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      }),
+    }),
   }),
 })
 
-export const { useGetTransactionsMutation, useGetTransactionByIdMutation, useAddToTransactionMutation, useDeleteFromTransactionMutation, useUpdateTransactionByIdMutation } = transactionApi
+export const { useGetTransactionsMutation, useGetTransactionByIdMutation, useAddToTransactionMutation, useDeleteFromTransactionMutation, useUpdateTransactionByIdMutation, useDeleteImageMutation } = transactionApi

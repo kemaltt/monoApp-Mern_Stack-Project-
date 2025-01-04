@@ -1,11 +1,11 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { apiBaseUrl } from '../../api/api'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from '../../api/api'
 
 
 export const productApi = createApi({
   reducerPath: 'productApi',
-  baseQuery: fetchBaseQuery({ baseUrl: apiBaseUrl }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     getProducts: builder.mutation({
       query: (category) => ({

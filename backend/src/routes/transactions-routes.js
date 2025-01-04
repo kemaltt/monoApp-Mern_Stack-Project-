@@ -121,7 +121,7 @@ transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, async (re
     // Transaction'u veritabanından sil
     const removeTransactionResult = await removeTransaction({ transactionId, userId });    
     // Transaction ile ilişkili resmi sil
-    if (removeTransactionResult.value.img.url) {
+    if (removeTransactionResult?.value?.img?.url) {
       await deleteFromFirebase(removeTransactionResult.value.img.url);
     }
     res.json({ removeTransaction: removeTransactionResult });
