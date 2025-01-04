@@ -8,7 +8,7 @@
   );
   border-radius: 0 0 20px 20px;
 
-  height: 25vh;
+  height: 20vh;
 
   .header_container {
     display: flex;
@@ -26,10 +26,10 @@
     }
   }
   .chart_data {
-    margin-top: 10vh;
-    padding: 4vh 5%;
+    margin-top: 8vh;
+    padding: 0vh 2%;
 
-    height: 350px;
+    height: 320px;
     canvas {
       height: 300px !important;
     }
