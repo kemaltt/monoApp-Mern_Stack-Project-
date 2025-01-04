@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import TopMobileBar from "./TopMobileBar";
 import {
   useDeleteFromTransactionMutation,
+  useDeleteImageMutation,
   useGetTransactionByIdMutation,
   useUpdateTransactionByIdMutation,
 } from "../redux/transaction/transaction-api";
@@ -17,7 +18,8 @@ const EditExpense = () => {
   const { id } = useParams();
 
   const [deleteFromTransaction] = useDeleteFromTransactionMutation();
-  const [getTransactionById] = useGetTransactionByIdMutation();
+  const [getTransactionById,{data}] = useGetTransactionByIdMutation();
+  const [deleteImage] = useDeleteImageMutation();
   const [updateTransactionById, { isLoading }] = useUpdateTransactionByIdMutation();
 
   const [name, setName] = useState("");
@@ -70,7 +72,9 @@ const EditExpense = () => {
     }
   };
 
-  const removeImage = () => {
+  const removeImage = async () => {
+    if (data?.img)
+      await deleteImage(data?.img?.url).unwrap();
     setReceipt(null);
     setPreviewImg(null);
   };

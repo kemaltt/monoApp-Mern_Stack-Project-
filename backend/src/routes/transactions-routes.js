@@ -175,6 +175,16 @@ transactionsRouter.put(
   }
 );
 
+transactionsRouter.delete("/delete-image", doAuthMiddleware, async (req, res) => {
+  try {
+    const { fileUrl } = req.body;
+    await deleteFromFirebase(fileUrl);
+    res.json({ message: "Image deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    res.status(500).json({ error: "Failed to delete image." });
+  }
+});
 
 module.exports = {
   transactionsRouter,
