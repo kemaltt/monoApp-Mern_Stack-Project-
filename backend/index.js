@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 9000;
 const morgan = require("morgan");
 const { transactionsRouter } = require("./src/routes/transactions-routes");
 const { userRouter } = require("./src/routes/user-routes");
+// const { connectMongoDB } = require("./src/config/MongoDb");
 
 // app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 //Hi
@@ -53,4 +54,7 @@ app.get("/ping", (req, res) => {
 }
 );
 
-app.listen(PORT, () => console.log(`Server Started at Port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server Started at Port ${PORT}`),
+  // connectMongoDB()
+);

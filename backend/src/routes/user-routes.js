@@ -1,5 +1,4 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
 // const multer = require("multer");
 // const { doAuthMiddleware } = require("../auth/doAuthMiddleware");
 const { makeDoAuthMiddleware } = require("../auth/doAuthMiddleware");
@@ -10,6 +9,8 @@ const { loginUser } = require("../controllers/user-controller/login-user");
 const { registerUser } = require("../controllers/user-controller/register-user");
 const { showAllUser } = require("../controllers/user-controller/show-all-users");
 const {  uploadToFirebase, upload } = require("../services/file-upload.service");
+const UserModel = require("../models/UserModel");
+const { register } = require("../controllers/auth-controller");
 
 const userRouter = express.Router();
 
@@ -42,13 +43,10 @@ userRouter.get("/allUsers", doAuthMiddleware, async (_, res) => {
 // const upload = multer({ storage });
 const uploadMiddleware = upload.single("userImg");
 
+// userRouter.post("/register",uploadMiddleware ,register)
 userRouter.post("/register", uploadMiddleware, async (req, res) => {
   try {
     const userInfo = req.body;
-    // // Token'dan kullanıcı ID'sini al
-    // const authHeader = req.headers["token"];
-    // const token = authHeader && authHeader.split(" ")[1];
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = 12345;
 
     if (!userId) {
