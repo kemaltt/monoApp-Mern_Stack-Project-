@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const Transaction = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: true
   },
-  transaction_type: {
-    type: String,
+  income: {
+    type: Boolean,
     required: true
   },
   amount: {

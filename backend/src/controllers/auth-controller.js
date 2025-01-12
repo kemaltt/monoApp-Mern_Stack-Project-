@@ -81,9 +81,9 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    if (!user.is_verified) {
-      return res.status(400).json({ message: "Please verify your account before logging in" });
-    }
+    // if (!user.is_verified) {
+    //   return res.status(400).json({ message: "Please verify your account before logging in" });
+    // }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -94,7 +94,7 @@ const login = async (req, res) => {
       httpOnly: true,
     }).json({
       status: "success",
-      access_token,
+      accessToken:access_token,
       user: {
         id: user._id,
         name: user.name,

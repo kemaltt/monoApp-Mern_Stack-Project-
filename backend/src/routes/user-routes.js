@@ -8,9 +8,11 @@ const { refreshUserToken } = require("../controllers/user-controller/refresh-use
 const { loginUser } = require("../controllers/user-controller/login-user");
 const { registerUser } = require("../controllers/user-controller/register-user");
 const { showAllUser } = require("../controllers/user-controller/show-all-users");
-const {  uploadToFirebase, upload } = require("../services/file-upload.service");
+const { uploadToFirebase, upload } = require("../services/file-upload.service");
 const UserModel = require("../models/UserModel");
-const { register } = require("../controllers/auth-controller");
+const { register, login } = require("../controllers/auth-controller");
+const { getTransactions } = require("../controllers/transaction-controller");
+const { verifyToken } = require("../auth/verifyToken");
 
 const userRouter = express.Router();
 
@@ -56,7 +58,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
       const file = req.file; // req.file'deki dosyayı değişkene ata
       const uploadedFile = await uploadToFirebase(file, "userImg", null, userId);
       console.log('file uploaded', uploadedFile);
-      
+
       const user = await registerUser({ ...userInfo, userImg: uploadedFile });
       res.json(user);
     } else {
@@ -72,50 +74,53 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
   }
 });
 
-userRouter.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    if (!email) {
-      throw new Error("E-Mail is required.");
-    }
+userRouter.post("/login", login)
+// userRouter.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    if (!password) {
-      throw new Error("Password is required.");
-    }
+//     if (!email) {
+//       throw new Error("E-Mail is required.");
+//     }
 
-    const { accessToken, refreshToken } = await loginUser({
-      email,
-      password
-    });
+//     if (!password) {
+//       throw new Error("Password is required.");
+//     }
 
-    req.session.refreshToken = refreshToken;
+//     const { accessToken, refreshToken } = await loginUser({
+//       email,
+//       password
+//     });
 
-    res.json({ accessToken });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: err.toString() || "Internal Server Error.",
-    });
-  }
-});
+//     req.session.refreshToken = refreshToken;
+
+//     res.json({ accessToken });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({
+//       message: err.toString() || "Internal Server Error.",
+//     });
+//   }
+// });
 userRouter.get("/logout", async (req, res) => {
   req.session.refreshToken = null;
-  res.status(200).json({message: 'Logged out successfully.'});
+  res.status(200).json({ message: 'Logged out successfully.' });
 });
 
-userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
-  try {
-    const userId = req.userClaims.sub;
-    const userWallet = await showWallet({ userId });
+userRouter.get("/transactions", verifyToken, getTransactions)
+// userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
+//   try {
+//     const userId = req.userClaims.sub;
+//     const userWallet = await showWallet({ userId });
 
-    res.status(200).json(userWallet);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ err: { message: err ? err.message : "User not found..." } });
-  }
-});
+//     res.status(200).json(userWallet);
+//   } catch (err) {
+//     res
+//       .status(500)
+//       .json({ err: { message: err ? err.message : "User not found..." } });
+//   }
+// });
 
 userRouter.get("/profileInfo", doAuthMiddleware, async (req, res) => {
   try {
