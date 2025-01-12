@@ -75,52 +75,52 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
 });
 
 
-userRouter.post("/login", login)
-// userRouter.post("/login", async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
+// userRouter.post("/login", login)
+userRouter.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-//     if (!email) {
-//       throw new Error("E-Mail is required.");
-//     }
+    if (!email) {
+      throw new Error("E-Mail is required.");
+    }
 
-//     if (!password) {
-//       throw new Error("Password is required.");
-//     }
+    if (!password) {
+      throw new Error("Password is required.");
+    }
 
-//     const { accessToken, refreshToken } = await loginUser({
-//       email,
-//       password
-//     });
+    const { accessToken, refreshToken } = await loginUser({
+      email,
+      password
+    });
 
-//     req.session.refreshToken = refreshToken;
+    req.session.refreshToken = refreshToken;
 
-//     res.json({ accessToken });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({
-//       message: err.toString() || "Internal Server Error.",
-//     });
-//   }
-// });
+    res.json({ accessToken });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: err.toString() || "Internal Server Error.",
+    });
+  }
+});
 userRouter.get("/logout", async (req, res) => {
   req.session.refreshToken = null;
   res.status(200).json({ message: 'Logged out successfully.' });
 });
 
-userRouter.get("/transactions", verifyToken, getTransactions)
-// userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
-//   try {
-//     const userId = req.userClaims.sub;
-//     const userWallet = await showWallet({ userId });
+// userRouter.get("/transactions", verifyToken, getTransactions)
+userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
+  try {
+    const userId = req.userClaims.sub;
+    const userWallet = await showWallet({ userId });
 
-//     res.status(200).json(userWallet);
-//   } catch (err) {
-//     res
-//       .status(500)
-//       .json({ err: { message: err ? err.message : "User not found..." } });
-//   }
-// });
+    res.status(200).json(userWallet);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: { message: err ? err.message : "User not found..." } });
+  }
+});
 
 userRouter.get("/profileInfo", doAuthMiddleware, async (req, res) => {
   try {

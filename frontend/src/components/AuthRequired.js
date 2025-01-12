@@ -4,7 +4,6 @@ import { apiBaseUrl } from "../api/api";
 import Loading from "./Loading";
 
 const AuthRequired = ({ token, children, setToken }) => {
-  console.log("token", token);
   
   const [loading, setLoading] = useState(true);
   useEffect(() => {

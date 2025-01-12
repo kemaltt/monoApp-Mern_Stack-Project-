@@ -56,6 +56,6 @@ app.get("/ping", (req, res) => {
 );
 
 app.listen(PORT, () =>
-  // console.log(`Server Started at Port ${PORT}`),
-  connectMongoDB(PORT)
+  console.log(`Server Started at Port ${PORT}`),
+  // connectMongoDB(PORT)
 );

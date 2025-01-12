@@ -37,60 +37,60 @@ transactionsRouter.get("/all", doAuthMiddleware, (req, res) => {
 // const upload = multer({ storage });
 const uploadMiddleware = upload.single("img");
 
-transactionsRouter.post("/transaction/add", verifyToken, uploadMiddleware, addTransaction)
+// transactionsRouter.post("/transaction/add", verifyToken, uploadMiddleware, addTransaction)
 
-// transactionsRouter.post(
-//   "/transaction/add",
-//   uploadMiddleware,
-//   doAuthMiddleware,
-//   async (req, res) => {
-//     if (!req.body) {
-//       return res.status(400).json({ error: "Please include a new Income" }); // Hata için doğru HTTP kodu
-//     }
+transactionsRouter.post(
+  "/transaction/add",
+  uploadMiddleware,
+  doAuthMiddleware,
+  async (req, res) => {
+    if (!req.body) {
+      return res.status(400).json({ error: "Please include a new Income" }); // Hata için doğru HTTP kodu
+    }
 
-//     const userId = req.userClaims.sub;
+    const userId = req.userClaims.sub;
 
-//     if (!userId) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-//     // Varsayılan olarak img alanını null yapıyoruz.
-//     let img = null;
-//     if (req.file) {
-//       img = req.file.originalname;
-//     }
+    // Varsayılan olarak img alanını null yapıyoruz.
+    let img = null;
+    if (req.file) {
+      img = req.file.originalname;
+    }
 
-//     try {
-//       // Yeni transaction oluşturuluyor
-//       const addedTransaction = await createNewTransaction({ userId, img, ...req.body });
+    try {
+      // Yeni transaction oluşturuluyor
+      const addedTransaction = await createNewTransaction({ userId, img, ...req.body });
 
-//       // Eğer resim yüklendiyse Firebase'e yükle ve transaction'ı güncelle
-//       if (req.file) {
-//         const transactionId = addedTransaction.transactionId.toString();
+      // Eğer resim yüklendiyse Firebase'e yükle ve transaction'ı güncelle
+      if (req.file) {
+        const transactionId = addedTransaction.transactionId.toString();
 
-//         // Dosyayı yükle
-//         const uploadedFile = await uploadToFirebase(req.file, "img", transactionId, userId);
-//         const { insertResult, updateResult, ...rest } = addedTransaction
-//         // Transaction'ı güncelle
-//         const updatedTransaction = await updateTransaction(
-//           { ...rest, img: uploadedFile },
-//           userId
-//         );
+        // Dosyayı yükle
+        const uploadedFile = await uploadToFirebase(req.file, "img", transactionId, userId);
+        const { insertResult, updateResult, ...rest } = addedTransaction
+        // Transaction'ı güncelle
+        const updatedTransaction = await updateTransaction(
+          { ...rest, img: uploadedFile },
+          userId
+        );
 
-//         // Güncellenmiş transaction döndür
-//         return res.status(201).json(updatedTransaction);
-//       }
+        // Güncellenmiş transaction döndür
+        return res.status(201).json(updatedTransaction);
+      }
 
-//       // Eğer resim yoksa sadece transaction'ı döndür
-//       return res.status(201).json(addedTransaction);
-//     } catch (err) {
-//       console.error("Error adding transaction:", err);
+      // Eğer resim yoksa sadece transaction'ı döndür
+      return res.status(201).json(addedTransaction);
+    } catch (err) {
+      console.error("Error adding transaction:", err);
 
-//       // Hata durumunda yanıt gönder
-//       return res.status(500).json({ error: "Failed to add new income to database." });
-//     }
-//   }
-// );
+      // Hata durumunda yanıt gönder
+      return res.status(500).json({ error: "Failed to add new income to database." });
+    }
+  }
+);
 
 
 transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
