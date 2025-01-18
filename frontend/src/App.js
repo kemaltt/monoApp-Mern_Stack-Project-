@@ -15,6 +15,7 @@ import EditIncome from "./components/EditIncome";
 import AuthRequired from "./components/AuthRequired";
 import { useAppContext } from "./context/AppContext";
 import "bootstrap/dist/css/bootstrap.css";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
 
@@ -79,6 +80,7 @@ function App() {
               </AuthRequired>
             }
           />
+          <Route path="/edit-profile" element={<EditProfile />} />
 
           <Route
             path="/add"

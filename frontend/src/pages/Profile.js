@@ -67,28 +67,23 @@ const Profile = () => {
           <p className="username">{transactions.email}</p>
           <div className="profileContent">
             <p>
-              {" "}
-              <img src={userprofile} alt="profile icon" />{" "}
-              <Link to="/profile">Account info</Link>
+              <img src={userprofile} alt="profile icon" />
+              <Link to="/edit-profile">Account info</Link>
             </p>
             <p>
-              {" "}
-              <img src={users} alt="personal profile icon" />{" "}
-              <Link to="/profile">Personal profile</Link>{" "}
+              <img src={users} alt="personal profile icon" />
+              <Link to="/profile">Personal profile</Link>
             </p>
             <p>
-              {" "}
-              <img src={envelope} alt="message" />{" "}
+              <img src={envelope} alt="message" />
               <Link to="/profile">Message center</Link>
             </p>
             <p>
-              {" "}
-              <img src={shield} alt="shield" />{" "}
-              <Link to="/profile">Login and security</Link>{" "}
+              <img src={shield} alt="shield" />
+              <Link to="/profile">Login and security</Link>
             </p>
             <p>
-              {" "}
-              <img src={lock} alt="lock" />{" "}
+              <img src={lock} alt="lock" />
               <Link to="/profile">Data and privacy</Link>
             </p>
             <p onClick={logOut}>
