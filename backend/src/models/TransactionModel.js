@@ -14,7 +14,10 @@ const Transaction = new mongoose.Schema({
     required: true
   },
   transaction_image: {
-    type: String
+    type: Object
+  },
+  img: {
+    type: Object
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

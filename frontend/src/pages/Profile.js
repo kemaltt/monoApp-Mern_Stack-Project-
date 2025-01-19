@@ -55,11 +55,11 @@ const Profile = () => {
           >
             <img
               src={
-                transactions.userImg?.startsWith("http")
-                  ? transactions.userImg
-                  : `${apiBaseUrl}/${transactions.userImg}`
+                transactions.profile_image?.startsWith("http")
+                  ? transactions.profile_image
+                  : `${apiBaseUrl}/${transactions.profile_image}`
               }
-              alt={transactions.userImg}
+              alt={transactions.profile_image}
               className="profilePicture"
             />
           </motion.div>

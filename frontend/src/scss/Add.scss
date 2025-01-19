@@ -2,7 +2,7 @@
 
 .add {
 
-    .green {
+    .green , .red {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -13,15 +13,22 @@
             font-size: 18px;
         }
     }
+
     .switchAddExpanseBtn {
         border-radius: 0 0 20px 20px;
         height: 25vh;
 
-        button {
-            margin: 5vh 10%;
-            border: none;
-            background: none;
-            color: #fff;
+        .buttonContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            button {
+                margin: 5vh 10%;
+                border: none;
+                background: none;
+                color: #fff;
+            }
         }
     }
 
@@ -30,9 +37,9 @@
         top: -80px;
         background: white;
         box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
-        border-radius: 20px ;   
- width: 80%;
- margin: 0 auto;
+        border-radius: 20px;
+        width: 80%;
+        margin: 0 auto;
         padding-top: 1vh;
         display: block;
         text-align: left;
@@ -40,7 +47,7 @@
         .formContent {
             padding: 0 5% 5vh;
 
-         
+
 
             /* Name + Amount + Date + Receipt */
             label {
@@ -53,10 +60,11 @@
                 text-align: left;
                 padding-bottom: 1vh;
             }
+
             label:nth-of-type(4) {
                 margin-top: 2vh;
-                }
-    
+            }
+
 
             input {
                 display: block;
@@ -81,10 +89,11 @@
             input[type="file"] {
                 display: none;
             }
+
             .custom-file-upload {
                 border: 1px solid #ccc;
                 display: inline-block;
-                    text-align: center;
+                text-align: center;
                 border: 1px dashed #666666;
                 padding: 1.5vh 4%;
                 width: 100%;
@@ -94,7 +103,7 @@
             }
 
             /* Submit Button */
-            button{
+            button {
 
                 background: linear-gradient(180deg, rgba(136, 152, 255, 1) 0%, rgba(43, 71, 252, 1) 100%);
                 border: 1px solid #666666;
@@ -107,13 +116,14 @@
                 cursor: pointer;
                 color: #fff;
 
-                
+
             }
 
-            .active_income:active{
+            .active_income:active {
                 background: $bgGreen;
             }
-            .active_expense:active{
+
+            .active_expense:active {
                 background: $bgRed;
 
             }
@@ -162,5 +172,5 @@
             display: none;
         }
     }
-      
+
 }

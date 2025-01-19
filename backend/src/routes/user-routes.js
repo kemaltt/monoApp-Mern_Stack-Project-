@@ -10,7 +10,7 @@ const { registerUser } = require("../controllers/user-controller/register-user")
 const { showAllUser } = require("../controllers/user-controller/show-all-users");
 const { uploadToFirebase, upload } = require("../services/file-upload.service");
 const UserModel = require("../models/UserModel");
-const { register, login } = require("../controllers/auth-controller");
+const { register, login, updateUser } = require("../controllers/auth-controller");
 const { getTransactions } = require("../controllers/transaction-controller");
 const { verifyToken } = require("../auth/verifyToken");
 
@@ -43,9 +43,16 @@ userRouter.get("/allUsers", doAuthMiddleware, async (_, res) => {
 //   },
 // });
 // const upload = multer({ storage });
-const uploadMiddleware = upload.single("userImg");
+const uploadMiddleware = upload.single("profile_image");
 
+// new routes
 // userRouter.post("/register",uploadMiddleware ,register)
+// userRouter.post("/login", login)
+// userRouter.put("/update-user", uploadMiddleware, verifyToken, updateUser)
+// userRouter.get("/transactions", verifyToken, getTransactions)
+
+
+
 userRouter.post("/register", uploadMiddleware, async (req, res) => {
   try {
     const userInfo = req.body;
@@ -56,10 +63,10 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
     }
     if (req.file) {
       const file = req.file; // req.file'deki dosyayı değişkene ata
-      const uploadedFile = await uploadToFirebase(file, "userImg", null, userId);
+      const uploadedFile = await uploadToFirebase(file, "profile_image", null, userId);
       console.log('file uploaded', uploadedFile);
 
-      const user = await registerUser({ ...userInfo, userImg: uploadedFile });
+      const user = await registerUser({ ...userInfo, profile_image: uploadedFile });
       res.json(user);
     } else {
       const user = await registerUser({ ...userInfo });
@@ -75,7 +82,7 @@ userRouter.post("/register", uploadMiddleware, async (req, res) => {
 });
 
 
-// userRouter.post("/login", login)
+
 userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -108,7 +115,6 @@ userRouter.get("/logout", async (req, res) => {
   res.status(200).json({ message: 'Logged out successfully.' });
 });
 
-// userRouter.get("/transactions", verifyToken, getTransactions)
 userRouter.get("/transactions", doAuthMiddleware, async (req, res) => {
   try {
     const userId = req.userClaims.sub;

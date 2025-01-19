@@ -7,7 +7,6 @@ const morgan = require("morgan");
 const { transactionsRouter } = require("./src/routes/transactions-routes");
 const { userRouter } = require("./src/routes/user-routes");
 const { connectMongoDB } = require("./src/config/MongoDb");
-// const { connectMongoDB } = require("./src/config/MongoDb");
 
 // app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 //Hi

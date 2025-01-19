@@ -2,7 +2,7 @@ const { UserDAO } = require("../../db-access");
 const { makeUser } = require("../../domain/User");
 const { hash, createRandomHash } = require("../../utils/hash");
 
-async function registerUser({ name, email, password, userImg }) {
+async function registerUser({ name, email, password, profile_image }) {
   const nameVal = /^(?=)(?=).{2,15}$/;
   const emailVal = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i;
   const passwordVal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
@@ -32,7 +32,7 @@ async function registerUser({ name, email, password, userImg }) {
     const newUser = makeUser({
       name,
       email,
-      userImg,
+      profile_image,
       passwordHash,
       passwordSalt,
     });

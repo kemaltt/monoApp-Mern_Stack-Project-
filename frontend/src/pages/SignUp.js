@@ -15,7 +15,7 @@ const SignUp = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setValue("userImg", file); // React Hook Form'un "setValue" fonksiyonu ile image state'i güncelleyebiliriz.
+      setValue("profile_image", file); // React Hook Form'un "setValue" fonksiyonu ile image state'i güncelleyebiliriz.
 
       // Create an image preview
       const reader = new FileReader();
@@ -27,7 +27,7 @@ const SignUp = () => {
   };
 
   const removeImage = () => {
-    setValue("userImg", null);
+    setValue("profile_image", null);
     setPreviewImg(null);
   };
 
@@ -36,8 +36,8 @@ const SignUp = () => {
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("password", data.password);
-    if (data.userImg) {
-      formData.append("userImg", data.userImg, data.userImg.name);
+    if (data.profile_image) {
+      formData.append("profile_image", data.profile_image, data.profile_image.name);
     }
 
     const response = await registerMutation(formData);

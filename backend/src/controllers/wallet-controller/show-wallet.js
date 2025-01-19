@@ -12,7 +12,7 @@ async function showWallet({ userId }) {
     _id: user._id,
     name: user.name,
     email: user.email,
-    userImg: user.userImg,
+    profile_image: user.profile_image,
     totalBalance: user.totalBalance,
   };
 

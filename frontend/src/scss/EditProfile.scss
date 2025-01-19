@@ -40,21 +40,20 @@
             .edit-image-icon {
                 position: absolute;
                 cursor: pointer;
-                width: 25px;
-                height: 25px;
+                font-size: 2rem;
                 background: rgba(255, 255, 255, 0.8);
                 padding: 5px;
                 border-radius: 50%;
-                top: -20px;
+                top: -25px;
                 right: 5px;
             }
 
             .remove-image-icon {
                 position: absolute;
                 cursor: pointer;
-                width: 25px;
-                height: 25px;
+                font-size: 2rem;
                 background: rgba(255, 255, 255, 0.8);
+                color: red;
                 padding: 5px;
                 border-radius: 50%;
                 top: 95px;

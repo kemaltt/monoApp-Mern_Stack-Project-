@@ -63,8 +63,8 @@
       }
 
       span {
-     color: red;
-      font-size: 12px;
+        color: red;
+        font-size: 12px;
       }
 
       /* Email Input */
@@ -90,20 +90,22 @@
       color: white;
       font-size: 18px;
       font-weight: 600;
-      width: 80%;
-    }
+      width: 80% !important;
 
-    button:hover {
-      background: rgb(136, 152, 255);
-      background: linear-gradient(90deg,
-          rgba(136, 152, 255, 1) 0%,
-          rgba(43, 71, 252, 1) 100%);
+      button:hover {
+        background: rgb(136, 152, 255);
+        background: linear-gradient(90deg,
+            rgba(136, 152, 255, 1) 0%,
+            rgba(43, 71, 252, 1) 100%);
 
-      a {
-        text-decoration: none;
-        color: #fff;
+        a {
+          text-decoration: none;
+          color: #fff;
+        }
       }
+
     }
+
   }
 
   /* Have no account? */

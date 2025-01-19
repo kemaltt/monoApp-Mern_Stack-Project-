@@ -8,7 +8,7 @@ const { removeTransaction } = require("../controllers/transaction-controller/del
 const { updateTransaction } = require("../controllers/transaction-controller/edit-transaction");
 const { upload, uploadToFirebase, deleteFromFirebase } = require("../services/file-upload.service");
 const { verifyToken } = require("../auth/verifyToken");
-const { addTransaction } = require("../controllers/transaction-controller");
+// const { addTransaction, getTransaction, deleteTransaction ,updateTransaction} = require("../controllers/transaction-controller");
 const doAuthMiddleware = makeDoAuthMiddleware("access");
 const transactionsRouter = express.Router();
 
@@ -35,9 +35,20 @@ transactionsRouter.get("/all", doAuthMiddleware, (req, res) => {
 //   },
 // });
 // const upload = multer({ storage });
+
+
 const uploadMiddleware = upload.single("img");
 
+// new routes
 // transactionsRouter.post("/transaction/add", verifyToken, uploadMiddleware, addTransaction)
+// transactionsRouter.get("/transaction/:id", verifyToken, getTransaction)
+// transactionsRouter.put("/transaction/edit/:id", verifyToken, uploadMiddleware, updateTransaction)
+// transactionsRouter.delete("/transaction/delete/:id", verifyToken, deleteTransaction)
+
+
+
+
+
 
 transactionsRouter.post(
   "/transaction/add",
@@ -104,19 +115,7 @@ transactionsRouter.get("/transaction/:id", doAuthMiddleware, (req, res) => {
     });
 });
 
-// transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, (req, res) => {
-//   const transactionId = req.params.id;
-//   const userId = req.userClaims.sub;
 
-//   removeTransaction({ transactionId, userId })
-//     .then((removeTransaction) => res.json({ removeTransaction }))
-//     .catch((err) => {
-//       console.log(err);
-//       res
-//         .status(500)
-//         .json({ error: "Failed to remove transaction from database." });
-//     });
-// });
 transactionsRouter.delete("/transaction/delete/:id", doAuthMiddleware, async (req, res) => {
   const transactionId = req.params.id;
   const userId = req.userClaims.sub;

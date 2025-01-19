@@ -2,7 +2,7 @@ function makeUser({
   _id,
   name,
   email,
-  userImg,
+  profile_image,
   totalBalance,
   passwordHash,
   passwordSalt,
@@ -13,7 +13,7 @@ function makeUser({
   return {
     name,
     email,
-    userImg: userImg,
+    profile_image: profile_image,
     totalBalance: totalBalance || 0,
     passwordHash,
     passwordSalt,

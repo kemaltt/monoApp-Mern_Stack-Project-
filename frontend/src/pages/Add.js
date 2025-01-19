@@ -79,8 +79,11 @@ const Add = () => {
           className="switchAddExpanseBtn"
         >
           <TopMobileBar />
+          <div className="buttonContainer">
           <button onClick={() => setIncome(true)}>Add Income</button>
           <button onClick={() => setIncome(false)}>Add Expense</button>
+
+          </div>
         </div>
         <div>
           <div className={income ? "green" : "red"}>

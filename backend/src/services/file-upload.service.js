@@ -9,7 +9,7 @@ const uploadToFirebase = async (file, fileType, id, userId) => {
     const folderPath =
       fileType === "img"
         ? `private/users/${userId}/receipts/${id}`
-        : fileType === "userImg"
+        : fileType === "profile_image"
           ? `private/users/${userId}/profile`
           : `other`;
 
@@ -23,7 +23,7 @@ const uploadToFirebase = async (file, fileType, id, userId) => {
 
     const downloadURL = await getDownloadURL(storageRef);
 
-    if(fileType === "userImg") {
+    if(fileType === "profile_image") {
       return downloadURL;
     }
 

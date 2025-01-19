@@ -188,27 +188,33 @@ const resetPassword = async (req, res) => {
 
 const updateUser = async (req, res) => {
 
-  const userId = req.user.id;
+  const userId = req.userClaims.id;
+
   const { name, image } = req.body;
   try {
+
     if (userId) {
-      const user = await UserModel.findByIdAndUpdate(userId, { name, image }, { new: true });
+      const user = await UserModel.findByIdAndUpdate(userId, { name }, { new: true });
 
-      const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-
-      res.status(200).cookie("access_token", access_token, {
-        httpOnly: true,
-      }).json({
+      return res.status(200).json({
         status: "success",
-        access_token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          image: user.image
-        }
+        message: "User updated successfully",
       });
+      // const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+      // res.status(200).cookie("access_token", access_token, {
+      //   httpOnly: true,
+      // }).json({
+      //   status: "success",
+      //   access_token,
+      //   user: {
+      //     id: user._id,
+      //     name: user.name,
+      //     email: user.email,
+      //     role: user.role,
+      //     image: user.image
+      //   }
+      // });
     }
     else {
       return res.status(401).json({ message: "Unauthorized" });

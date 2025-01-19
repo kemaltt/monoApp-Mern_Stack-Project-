@@ -5,7 +5,7 @@ import { baseQueryWithAuth } from '../../api/api'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery:baseQueryWithAuth ,
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -58,13 +58,13 @@ export const authApi = createApi({
       })
     }),
     updateUser: builder.mutation({
-      query: ({ token, data }) => ({
+      query: (data) => ({
         url: '/update-user',
         method: 'PUT',
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
   }),

@@ -1,5 +1,6 @@
 const TransactionModel = require("../models/TransactionModel");
 const UserModel = require("../models/UserModel");
+const { deleteFromFirebase } = require("../services/file-upload.service");
 
 const addTransaction = async (req, res) => {
   const { amount, income } = req.body;
@@ -35,8 +36,82 @@ const getTransactions = async (req, res) => {
     if (!transactions || transactions.length === 0) {
       return res.status(404).json({ message: "No transactions found." });
     }
-    const totalAmount = await UserModel.findById(userId, { total_amount: 1, _id: 0 });
-    res.status(200).json({ transactions, totalAmount, userId });
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    // const totalAmount = await UserModel.findById(userId, { total_amount: 1, _id: 0 });
+    res.status(200).json({ transactions, totalAmount: { total_amount: user.total_amount }, name: user.name, email: user.email, profile_image: user.profile_image });
+  }
+  catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+const getTransaction = async (req, res) => {
+  const transactionId = req.params.id;
+  const userId = req.userClaims.id;
+
+  try {
+    const transaction = await TransactionModel.findOne({ _id: transactionId, userId });
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found." });
+    }
+    res.status(200).json(transaction);
+  }
+  catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+const updateTransaction = async (req, res) => {
+  const transactionId = req.params.id;
+  const userId = req.userClaims.id;
+  const { amount, income } = req.body;
+
+  try {
+    const transaction = await TransactionModel.findOne({ _id: transactionId, userId });
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found." });
+    }
+
+    const updateAmount = income ? amount : -amount;
+    const updatedTransaction = await TransactionModel.findByIdAndUpdate(transactionId, req.body, { new: true });
+    await UserModel.findByIdAndUpdate(userId, { $inc: { total_amount: updateAmount } }, { new: true });
+
+    res.status(200).json(updatedTransaction);
+  }
+  catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+const deleteTransaction = async (req, res) => {
+  const transactionId = req.params.id;
+  const userId = req.userClaims.id;
+
+  try {
+    const transaction = await TransactionModel.findOne({ _id: transactionId, userId });
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found." });
+    }
+    const updateAmount = transaction.income ? -transaction.amount : transaction.amount;
+    await UserModel.findByIdAndUpdate(userId, { $inc: { total_amount: updateAmount } }, { new: true });
+    const deletedTransaction = await TransactionModel.findByIdAndDelete(transactionId);
+    
+    if (deletedTransaction?.img?.url) {
+      await deleteFromFirebase(deletedTransaction?.img?.url);
+    }
+    res.status(200).json({ message: "Transaction deleted successfully." });
   }
   catch (error) {
     res.status(500).json({
@@ -48,5 +123,4 @@ const getTransactions = async (req, res) => {
 
 
 
-
-module.exports = { addTransaction, getTransactions };
+module.exports = { addTransaction, getTransactions, getTransaction, updateTransaction, deleteTransaction };

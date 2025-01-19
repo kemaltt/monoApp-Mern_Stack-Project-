@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../scss/EditProfile.scss";
-import EditIcon from "../img/Vector.png";
-import RemoveIcon from "../img/Vector.png";
+import { MdDelete } from "react-icons/md";
 import Nav from "../components/Nav";
 import { motion } from "framer-motion";
 import TopMobileBar from "../components/TopMobileBar";
@@ -10,8 +9,10 @@ import { useGetTransactionsMutation } from "../redux/transaction/transaction-api
 import Loading from "../components/Loading";
 import { apiBaseUrl } from "../api/api";
 import { useUpdateUserMutation } from "../redux/auth/auth-api";
-import UserIcon from "../img/userProfile.png";
-import EmailIcon from "../img/envelope.png"
+import { FaRegUser } from "react-icons/fa";
+import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -21,11 +22,12 @@ const EditProfile = () => {
   const { transactions } = useSelector((state) => state.transactions);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [userImg, setUserImg] = useState("");
+  const [profile_image, setprofile_image] = useState("");
   const [editMode, setEditMode] = useState({ name: false, email: false })
   const [showEditIcons, setShowEditIcons] = useState({ name: false, email: false });
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getAllTransactions = async () => {
@@ -38,17 +40,17 @@ const EditProfile = () => {
     if (transactions) {
       setName(transactions.name);
       setEmail(transactions.email);
-      setUserImg(transactions.userImg);
+      setprofile_image(transactions.profile_image);
     }
   }, [transactions]);
 
 
   const handleImageChange = (e) => {
-    setUserImg(e.target.files[0]);
+    setprofile_image(e.target.files[0]);
   };
 
   const handleRemoveImage = () => {
-    setUserImg(null);
+    setprofile_image(null);
   };
   const openFileInput = () => {
     if (fileInputRef.current) {
@@ -61,17 +63,19 @@ const EditProfile = () => {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
-    if (userImg) {
-      if (typeof userImg === 'string') {
+    if (profile_image) {
+      if (typeof profile_image === 'string') {
         // Eski resim URL'ini gönderme
-        formData.append('userImg', userImg);
+        formData.append('profile_image', profile_image);
 
       } else {
-        formData.append('userImg', userImg);
+        formData.append('profile_image', profile_image);
       }
     }
+    
     try {
       await updateUser(formData).unwrap();
+      navigate("/profile");
     } catch (error) {
       console.error("Error update user", error);
     } finally {
@@ -114,34 +118,30 @@ const EditProfile = () => {
             <div className="image-container">
               <img
                 src={
-                  userImg && typeof userImg !== 'string' ? URL.createObjectURL(userImg) :
-                    userImg?.startsWith("http")
-                      ? userImg
-                      : userImg ? `${apiBaseUrl}/${userImg}` : null
+                  profile_image && typeof profile_image !== 'string' ? URL.createObjectURL(profile_image) :
+                    profile_image?.startsWith("http")
+                      ? profile_image
+                      : profile_image ? `${apiBaseUrl}/${profile_image}` : null
                 }
-                alt={name}
+                alt={profile_image ? name : null}
                 className="profilePicture"
               />
-                <img
-                  src={EditIcon}
-                  alt="Edit Icon"
-                  className="edit-image-icon"
-                  onClick={openFileInput}
-                />
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                />
-                {userImg && (
-                  <img
-                    src={RemoveIcon}
-                    alt="Remove Icon"
-                    className="remove-image-icon"
-                    onClick={handleRemoveImage}
-                  />)}
-              </div>
+              <MdOutlineEdit
+                className="edit-image-icon"
+                onClick={openFileInput}
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleImageChange}
+              />
+              {profile_image && (
+                <MdDelete
+                  className="remove-image-icon"
+                  onClick={handleRemoveImage}
+                />)}
+            </div>
           </motion.div>
 
           {(loadingTransactions || loadingUpdate) ? <Loading />
@@ -160,11 +160,10 @@ const EditProfile = () => {
                 }}
               >
                 <div className="user_headline">
-                  <img src={UserIcon} alt="User Icon" className="edit-profile-icon" />
-
+                  <FaRegUser className="edit-profile-icon" />
                   {!editMode.name ? (<h5 onMouseEnter={() => setShowEditIcons({ ...showEditIcons, name: true })} onMouseLeave={() => setShowEditIcons({ ...showEditIcons, name: false })}>
-                    {name}
-                    {showEditIcons.name && (<img src={EditIcon} alt="Edit Icon" className="edit-icon" onClick={() => setEditMode({ ...editMode, name: true })} />)}
+                    <span className="mr-5">{name}</span>
+                    <MdOutlineEdit onClick={() => setEditMode({ ...editMode, name: true })} />
                   </h5>) : (
                     <input
                       type="text"
@@ -192,10 +191,12 @@ const EditProfile = () => {
                 }}
               >
                 <div className="user_headline">
-                  <img src={EmailIcon} alt="Email Icon" className="edit-profile-icon" />
+                  <MdOutlineAlternateEmail className="edit-profile-icon" />
                   {!editMode.email ? (<h5 onMouseEnter={() => setShowEditIcons({ ...showEditIcons, email: true })} onMouseLeave={() => setShowEditIcons({ ...showEditIcons, email: false })}>
                     {email}
-                    {showEditIcons.email && (<img src={EditIcon} alt="Edit Icon" className="edit-icon" onClick={() => setEditMode({ ...editMode, email: true })} />)}
+
+                    <MdOutlineEdit className="edit-icon" onClick={() => setEditMode({ ...editMode, email: true })} />
+
                   </h5>)
                     : (
                       <input
